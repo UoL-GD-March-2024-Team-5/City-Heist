@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) {
-		Player player = coll.gameObject.GetComponent<Player>();
+		PlayerController player = coll.gameObject.GetComponent<PlayerController>();
 		if (player != null) {
 			// Deactivate gameObject
 			gameObject.SetActive(false);
+
+			// Play SFX
+			AudioManager.S.PlayPickUpSFX();
 		} 
 	}
 }

@@ -44,13 +44,16 @@ public class Springboard : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Player") {
 			// Launch Player
-			Player.S.rigid.velocity = springDirection * 20;
+			PlayerController.S.rigid.velocity = springDirection * 20;
 
 			// Change sprite
 			sRend.sprite = springDown;
 			
 			// Set timer 
 			timeToPopUpDone = Time.time + timeToPopUp;
+
+			// Play SFX
+			AudioManager.S.PlaySpringboardSFX();
 		}
 	}
 }
