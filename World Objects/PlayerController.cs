@@ -43,10 +43,10 @@ public class PlayerController : MonoBehaviour {
 	private static PlayerController _S;
 	public static PlayerController S { get { return _S; } set { _S = value; } }
 
-	// DontDestroyOnLoad
-	private static bool exists;
+    // DontDestroyOnLoad
+    private static bool exists;
 
-	void Awake() {
+    void Awake() {
         // Singleton
         S = this;
 
@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour {
             Destroy(gameObject);
         }
 
-		// Get Components
-		rigid = GetComponent<Rigidbody2D>();
+        // Get Components
+        rigid = GetComponent<Rigidbody2D>();
 		circleColl = GetComponent<CircleCollider2D>();
 		anim = GetComponent<Animator>();
 
@@ -95,12 +95,14 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void InputJump(float speed) {
-		if (Input.GetButtonDown("MyJump")) {
-			rigid.velocity = Vector3.up * speed;
-			mode = ePlayerMode.jumpFull;
-		} else if (Input.GetButtonUp("MyJump")) {
-			if (rigid.velocity.y > 0) {
-				mode = ePlayerMode.jumpHalf;
+		if (isGrounded) {
+			if (Input.GetButtonDown("MyJump")) {
+				rigid.velocity = Vector3.up * speed;
+				mode = ePlayerMode.jumpFull;
+			} else if (Input.GetButtonUp("MyJump")) {
+				if (rigid.velocity.y > 0) {
+					mode = ePlayerMode.jumpHalf;
+				}
 			}
 		}
 	}
@@ -209,89 +211,91 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void FixedLoop() {
-		if (!GameManager.S.paused) {
-			// Grounded
-			isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        if (gameObject.activeInHierarchy) {
+			if (!GameManager.S.paused) {
+				// Grounded
+				isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-			// Flip
-			if (Input.GetAxisRaw("Horizontal") > 0 && !facingRight) { 
-				Flip(); 
-			} else if (Input.GetAxisRaw("Horizontal") < 0 && facingRight) { 
-				Flip(); 
-			}
-
-            // ************ DRAG ************ \\
-            // Multiplies the x velocity component by a value slightly lower than 1 each FixedUpdate,
-            // which reproduces a natural energy loss. Drag can range from 0 (no drag) to 1 (stops immediately).
-            var vel = rigid.velocity;
-            vel.x *= 1.0f - drag;
-            rigid.velocity = vel;
-
-            // Jump Animation
-            if (!isGrounded) {
-				if (mode != ePlayerMode.attack && mode != ePlayerMode.nada) {
-					SetAnim("Player_Jump", 0);
+				// Flip
+				if (Input.GetAxisRaw("Horizontal") > 0 && !facingRight) {
+					Flip();
+				} else if (Input.GetAxisRaw("Horizontal") < 0 && facingRight) {
+					Flip();
 				}
-			}
 
-			switch (mode) {
-				case ePlayerMode.idle:
-					// Anim
-					if (isGrounded) {
-						SetAnim("Player_Idle");
-					} else {
+				// ************ DRAG ************ \\
+				// Multiplies the x velocity component by a value slightly lower than 1 each FixedUpdate,
+				// which reproduces a natural energy loss. Drag can range from 0 (no drag) to 1 (stops immediately).
+				var vel = rigid.velocity;
+				vel.x *= 1.0f - drag;
+				rigid.velocity = vel;
+
+				// Jump Animation
+				if (!isGrounded) {
+					if (mode != ePlayerMode.attack && mode != ePlayerMode.nada) {
 						SetAnim("Player_Jump", 0);
 					}
-					break;
-				case ePlayerMode.walkLeft:
-					// Set velocity
-					rigid.velocity = new Vector2(-moveSpeed, rigid.velocity.y);
+				}
 
-					// Anim
-					if (isGrounded) {
-						SetAnim("Player_Walk");
-					}
-					break;
-				case ePlayerMode.walkRight:
-					// Set velocity
-					rigid.velocity = new Vector2(moveSpeed, rigid.velocity.y);
+				switch (mode) {
+					case ePlayerMode.idle:
+						// Anim
+						if (isGrounded) {
+							SetAnim("Player_Idle");
+						} else {
+							SetAnim("Player_Jump", 0);
+						}
+						break;
+					case ePlayerMode.walkLeft:
+						// Set velocity
+						rigid.velocity = new Vector2(-moveSpeed, rigid.velocity.y);
 
-					// Anim
-					if (isGrounded) {
-						SetAnim("Player_Walk");
-					}
-					break;
-				case ePlayerMode.attack:
-					// Anim
-					SetAnim("Player_Attack", 0);
-					break;
-				case ePlayerMode.jumpFull:
-					SetMode();
-					break;
-				case ePlayerMode.jumpHalf:
-					// Set velocity
-					rigid.velocity *= 0.5f;
+						// Anim
+						if (isGrounded) {
+							SetAnim("Player_Walk");
+						}
+						break;
+					case ePlayerMode.walkRight:
+						// Set velocity
+						rigid.velocity = new Vector2(moveSpeed, rigid.velocity.y);
 
-					SetMode();
-					break;
-				case ePlayerMode.runLeft:
-					// Set velocity
-					rigid.velocity = new Vector2(-moveSpeed * 2, rigid.velocity.y);
+						// Anim
+						if (isGrounded) {
+							SetAnim("Player_Walk");
+						}
+						break;
+					case ePlayerMode.attack:
+						// Anim
+						SetAnim("Player_Attack", 0);
+						break;
+					case ePlayerMode.jumpFull:
+						SetMode();
+						break;
+					case ePlayerMode.jumpHalf:
+						// Set velocity
+						rigid.velocity *= 0.5f;
 
-					// Anim
-					if (isGrounded) {
-						SetAnim("Player_Run");
-					}
-					break;
-				case ePlayerMode.runRight:
-					// Set velocity
-					rigid.velocity = new Vector2(moveSpeed * 2, rigid.velocity.y);
+						SetMode();
+						break;
+					case ePlayerMode.runLeft:
+						// Set velocity
+						rigid.velocity = new Vector2(-moveSpeed * 2, rigid.velocity.y);
 
-					// Anim
-					if (isGrounded) {
-						SetAnim("Player_Run");
-					}
-					break;
+						// Anim
+						if (isGrounded) {
+							SetAnim("Player_Run");
+						}
+						break;
+					case ePlayerMode.runRight:
+						// Set velocity
+						rigid.velocity = new Vector2(moveSpeed * 2, rigid.velocity.y);
+
+						// Anim
+						if (isGrounded) {
+							SetAnim("Player_Run");
+						}
+						break;
+				}
 			}
 		}
 	}
