@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour {
 	// Drag
 	private float			drag = 0.5f;
 
+	public bool				canMove = true;
+
 	// Components
 	public Rigidbody2D			rigid;
 	private CircleCollider2D	circleColl;
@@ -108,7 +110,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void Loop () {
-        if (!GameManager.S.paused) {
+        if (!GameManager.S.paused && canMove) {
 			switch (mode) {
 				case ePlayerMode.idle:
 					// Attack
@@ -212,7 +214,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void FixedLoop() {
         if (gameObject.activeInHierarchy) {
-			if (!GameManager.S.paused) {
+			if (!GameManager.S.paused && canMove) {
 				// Grounded
 				isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
