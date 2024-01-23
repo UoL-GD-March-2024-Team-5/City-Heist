@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
     [Header("Set in Inspector")]
     public string       firstScene;
 
-    public GameObject   timerGO;
+    public GameObject   gamplayUIGameObject;
 
     public Button       goBackToLevelSelectButton;
 
@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour {
         // Add go back to level select button listener
         goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectMenu(); });
 
-        // Deactivate timer game object
-        timerGO.SetActive(false);
+        // Deactivate gameplay UI object($, time, etc.)
+        gamplayUIGameObject.SetActive(false);
     }
 
     public void Loop() {
@@ -97,8 +97,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GoBackToLevelSelectMenu() {
-        // Deactivate timer game object
-        timerGO.SetActive(false);
+        // Deactivate gameplay UI object($, time, etc.)
+        gamplayUIGameObject.SetActive(false);
 
         // Load Scene
         SceneManager.LoadScene("Level_Selection");

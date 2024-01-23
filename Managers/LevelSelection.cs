@@ -19,10 +19,6 @@ public class LevelSelection : MonoBehaviour {
     }
 
     void Start() {
-        // Set selected game object
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[0].gameObject);
-
         // Add level select button listeners
         levelButtons[0].onClick.AddListener(delegate { LevelButtonPressed(0); });
         levelButtons[1].onClick.AddListener(delegate { LevelButtonPressed(1); });
@@ -30,6 +26,10 @@ public class LevelSelection : MonoBehaviour {
 
         // Deactivate player game object
         PlayerController.S.gameObject.SetActive(false);
+
+        // Set selected game object
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[0].gameObject);
     }
 
     // On button press, sets up for and loads a level scene
@@ -37,8 +37,8 @@ public class LevelSelection : MonoBehaviour {
         // Load Scene
         SceneManager.LoadScene("Level_" + (ndx+1).ToString());
 
-        // Deactivate timer game object
-        GameManager.S.timerGO.SetActive(true);
+        // Deactivate gameplay UI object ($, time, etc.)
+        GameManager.S.gamplayUIGameObject.SetActive(true);
 
         // Start timer
         Timer.S.StartTimer();
