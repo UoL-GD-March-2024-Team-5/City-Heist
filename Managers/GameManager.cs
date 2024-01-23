@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour {
     public GameObject   timerGO;
 
     public Button       goBackToLevelSelectButton;
+
+    public GameObject   floatingScoreGO;
 
     [Header("Set Dynamically")]
     // Pause
@@ -102,5 +105,33 @@ public class GameManager : MonoBehaviour {
 
         // Unpause game without unpausing the timer
         UnpauseGame(false);
+    }
+
+    public void InstantiateFloatingScore(GameObject targetGO, string message, Color color, float yPosOffset = 0) {
+        // Instantiate floating Score game object, & set its position to that of the target game object
+        GameObject floatingScore = Instantiate(floatingScoreGO, targetGO.transform.position, Quaternion.identity);
+
+        // Add y-pos offset to floating score position
+        Vector2 tPos = floatingScore.transform.position;
+        tPos.y += yPosOffset;
+        floatingScore.transform.position = tPos;
+
+        // Display and color floating score text
+        if (floatingScore != null) {
+            // Get text components (one for colored text in center, four for the black outline)
+            Text[] texts = floatingScore.GetComponentsInChildren<Text>();
+            for (int i = 0; i < texts.Length; i++) {
+                // Display text
+                texts[i].text = message;
+                // Set color of text in center
+                if (i == texts.Length - 1) {
+                    if (message != "0") {
+                        texts[i].color = color;
+                    } else {
+                        texts[i].color = Color.white;
+                    }
+                }
+            }
+        }
     }
 }
