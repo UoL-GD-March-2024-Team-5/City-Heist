@@ -8,7 +8,7 @@ public class FloatingScore : MonoBehaviour {
     public float speed = 1f;
 
     [Header("Set Dynamically")]
-    private bool canScale;
+    public bool canScale;
 
     void OnEnable() {
         StartCoroutine("FixedUpdateCoroutine");
@@ -20,16 +20,18 @@ public class FloatingScore : MonoBehaviour {
     }
 
     public IEnumerator FixedUpdateCoroutine() {
-        Invoke("ScaleUp", 1.0f);
+        // Increase y-pos
+        Vector3 tPos = transform.localPosition;
+        tPos.y += speed * Time.fixedDeltaTime;
+        transform.localPosition = tPos;
+
+        // Increase scale
         if (canScale) {
             transform.localScale += (Vector3.one * Time.fixedDeltaTime) / 3;
         }
 
+        // Start/loop coroutine again
         yield return new WaitForFixedUpdate();
         StartCoroutine("FixedUpdateCoroutine");
-    }
-
-    void ScaleUp() {
-        canScale = true;
     }
 }
