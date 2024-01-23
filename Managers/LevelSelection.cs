@@ -9,6 +9,15 @@ public class LevelSelection : MonoBehaviour {
     [Header("Set in Inspector")]
     public List<Button> levelButtons;
 
+    // Singleton
+    private static LevelSelection _S;
+    public static LevelSelection S { get { return _S; } set { _S = value; } }
+
+    void Awake() {
+        // Singleton
+        S = this;
+    }
+
     void Start() {
         // Set selected game object
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
@@ -28,6 +37,9 @@ public class LevelSelection : MonoBehaviour {
         // Load Scene
         SceneManager.LoadScene("Level_" + (ndx+1).ToString());
 
+        // Deactivate timer game object
+        GameManager.S.timerGO.SetActive(true);
+
         // Start timer
         Timer.S.StartTimer();
 
@@ -39,5 +51,9 @@ public class LevelSelection : MonoBehaviour {
 
         // Switch cam mode to follow player game object
         CameraManager.S.camMode = eCamMode.followAll;
+
+        // Display text
+        List<string> startMessage = new List<string>() { "Hey, press the L button on your keyboard to move to the next batch of dialogue.", "Is it working?", "Well, it better because I'm sick of working on this." };
+        DialogueManager.S.DisplayText(startMessage);
     }
 }
