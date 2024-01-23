@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json.Linq;
 
 // Acts as the game's main menu. Handles loading and setting up for gameplay scenes (Levels 1-3).
 public class LevelSelection : MonoBehaviour {
@@ -42,6 +43,9 @@ public class LevelSelection : MonoBehaviour {
 
         // Start timer
         Timer.S.StartTimer();
+
+        // Reset score/total value of stolen items
+        ScoreManager.S.ResetScore();
 
         // Reset player game object position
         PlayerController.S.transform.position = Vector3.zero;
