@@ -15,7 +15,7 @@ public class UpdateManager : MonoBehaviour {
 	public static event 	FixedLoopDelegate fixedUpdateDelegate;
 
 	// Selected GameObject
-	GameObject lastselect;
+	//GameObject lastselect;
 
 	// Screen Resolution
 	Vector2 resolution;
@@ -34,21 +34,22 @@ public class UpdateManager : MonoBehaviour {
 
 	void FixedUpdate(){
 		if (fixedUpdateDelegate != null) {
-			fixedUpdateDelegate ();
+            if (!GameManager.S.paused) {
+				fixedUpdateDelegate();
 
-			// If screen resolution changes...
-			if (resolution.x != Screen.width || resolution.y != Screen.height) {
-				// ... change screen width & height to update position/size of UI 
-				resolution.x = Screen.width;
-				resolution.y = Screen.height;
-			}
+				// If screen resolution changes...
+				if (resolution.x != Screen.width || resolution.y != Screen.height) {
+					// ... change screen width & height to update position/size of UI 
+					resolution.x = Screen.width;
+					resolution.y = Screen.height;
+				}
 
-
-			// Prevent left mouse clicks from deselecting currently selected game object
-			if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null) {
-				UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(lastselect);
-			} else {
-				lastselect = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+				//// Prevent left mouse clicks from deselecting currently selected game object]
+				//if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null) {
+				//	UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(lastselect);
+				//} else {
+				//	lastselect = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+				//}
 			}
 		}
 	}
