@@ -59,5 +59,8 @@ public class LevelSelection : MonoBehaviour {
         // Display text
         List<string> startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Is it working?", "Well, it better!!!" };
         DialogueManager.S.DisplayText(startMessage);
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eAudioClipName.buttonPressedSFX);
     }
 }
