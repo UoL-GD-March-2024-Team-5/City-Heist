@@ -33,12 +33,10 @@ public class DialogueManager : MonoBehaviour {
 
     public void Update() {
         if (dialogueText.isActiveAndEnabled && dialogueFinished) {
-            if (dialogueNdx <= 0) {
-                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
+                if (dialogueNdx <= 0) {
                     DeactivateTextBox();
-                }
-            } else if (dialogueNdx > 0) { // For Multiple Lines
-                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
+                } else if (dialogueNdx > 0) { // For Multiple Lines
                     if (message.Count > 0) {
                         List<string> tMessage;
 
@@ -47,9 +45,12 @@ public class DialogueManager : MonoBehaviour {
                         tMessage.RemoveAt(0);
 
                         // Call DisplayText() with one less line of "messages"
-                        DisplayText(tMessage);
+                        DisplayText(tMessage);        
                     }
                 }
+
+                // Play SFX
+                AudioManager.S.PlaySFX(eAudioClipName.dialogueEndSFX);
             }
         }  
     }
@@ -96,7 +97,7 @@ public class DialogueManager : MonoBehaviour {
             // Display text one word at a time
             for (int i = 0; i < dialogueWords.Length; i++) {
                 // Play SFX
-                //
+                AudioManager.S.PlaySFX(eAudioClipName.dialogueSFX);
 
                 dialogueSentences += dialogueWords[i] + " ";
                 this.dialogueText.text = dialogueSentences;
