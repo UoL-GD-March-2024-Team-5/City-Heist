@@ -81,6 +81,9 @@ public class GameManager : MonoBehaviour {
         // Set selected game object
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(goBackToLevelSelectButton.gameObject);
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eAudioClipName.buttonPressedSFX);
     }
 
     void UnpauseGame(bool unpauseTimer = true) {
@@ -94,6 +97,9 @@ public class GameManager : MonoBehaviour {
 
         // Deactivate pause menu
         pauseMenu.SetActive(false);
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eAudioClipName.unpauseSFX);
     }
 
     public void GoBackToLevelSelectMenu() {
