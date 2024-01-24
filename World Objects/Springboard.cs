@@ -53,7 +53,7 @@ public class Springboard : MonoBehaviour {
 			timeToPopUpDone = Time.time + timeToPopUp;
 
 			// Play SFX
-			AudioManager.S.PlaySpringboardSFX();
+			AudioManager.S.PlaySFX(eAudioClipName.springboardSFX);
 		}
 	}
 }
