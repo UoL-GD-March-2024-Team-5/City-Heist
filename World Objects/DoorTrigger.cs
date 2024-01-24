@@ -47,7 +47,7 @@ public class DoorTrigger : MonoBehaviour {
         // Deactivate Interactable Trigger
 
         // Play SFX
-
+        AudioManager.S.PlaySFX(eAudioClipName.doorOpenSFX);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
