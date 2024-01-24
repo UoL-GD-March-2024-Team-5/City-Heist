@@ -13,7 +13,7 @@ public class PickUp : MonoBehaviour {
 			gameObject.SetActive(false);
 
 			// Play SFX
-			AudioManager.S.PlayPickUpSFX();
+			AudioManager.S.PlaySFX(eAudioClipName.pickUpSFX);
 
 			// Instantiate floating score game object (temporarily displays this item's value to the user)
             GameManager.S.InstantiateFloatingScore(PlayerController.S.gameObject, "+$" + value, Color.green);
