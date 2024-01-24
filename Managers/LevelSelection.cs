@@ -57,7 +57,7 @@ public class LevelSelection : MonoBehaviour {
         CameraManager.S.camMode = eCamMode.followAll;
 
         // Display text
-        List<string> startMessage = new List<string>() { "Hey, press the L button on your keyboard to move to the next batch of dialogue.", "Is it working?", "Well, it better because I'm sick of working on this." };
+        List<string> startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Is it working?", "Well, it better!!!" };
         DialogueManager.S.DisplayText(startMessage);
     }
 }

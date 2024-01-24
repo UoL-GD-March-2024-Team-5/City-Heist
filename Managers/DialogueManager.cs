@@ -34,11 +34,11 @@ public class DialogueManager : MonoBehaviour {
     public void Update() {
         if (dialogueText.isActiveAndEnabled && dialogueFinished) {
             if (dialogueNdx <= 0) {
-                if (Input.GetButtonDown("SNES A Button")) {
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
                     DeactivateTextBox();
                 }
             } else if (dialogueNdx > 0) { // For Multiple Lines
-                if (Input.GetButtonDown("SNES A Button")) {
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
                     if (message.Count > 0) {
                         List<string> tMessage;
 
