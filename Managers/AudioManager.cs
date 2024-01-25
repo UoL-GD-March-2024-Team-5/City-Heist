@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eAudioClipName { buttonPressedSFX, pickUpSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
+public enum eSFXAudioClipName { buttonPressedSFX, pickUpSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
+public enum eBGMAudioClipName { levelSelect, level1, level2, level3 };
 
 public class AudioManager : MonoBehaviour {
     [Header("Set in Inspector")]
     // BGM audio source
     public AudioSource bgmAudioSource;
+    public AudioSource levelSelectAudioSource;
+    public AudioSource level1AudioSource;
+    public AudioSource level2AudioSource;
+    public AudioSource level3AudioSource;
 
     // SFX audio sources
     public AudioSource buttonPressedAudioSource;
@@ -43,36 +48,60 @@ public class AudioManager : MonoBehaviour {
 
     void Start() {
         // Start playing background music
-        //bgmAudioSource.clip = bgm;
-        //bgmAudioSource.Play();
+        PlayBGM(eBGMAudioClipName.levelSelect);
     }
 
-    // Plays a specific SFX audio source based on its input, an enum called 'eAudioClipName'
-    public void PlaySFX(eAudioClipName clipName) {
+    // Plays a specific SFX audio source based on its input, an enum called 'eSFXAudioClipName'
+    public void PlaySFX(eSFXAudioClipName clipName) {
         switch (clipName) {
-            case eAudioClipName.buttonPressedSFX:
+            case eSFXAudioClipName.buttonPressedSFX:
                 buttonPressedAudioSource.Play();
                 break;
-            case eAudioClipName.dialogueSFX:
+            case eSFXAudioClipName.dialogueSFX:
                 dialogueAudioSource.Play();
                 break;
-            case eAudioClipName.dialogueEndSFX:
+            case eSFXAudioClipName.dialogueEndSFX:
                 dialogueEndAudioSource.Play();
                 break;
-            case eAudioClipName.doorOpenSFX:
+            case eSFXAudioClipName.doorOpenSFX:
                 doorOpenAudioSource.Play();
                 break;
-            case eAudioClipName.pauseAudioSource:
+            case eSFXAudioClipName.pauseAudioSource:
                 pauseAudioSource.Play();
                 break;
-            case eAudioClipName.pickUpSFX:
+            case eSFXAudioClipName.pickUpSFX:
                 pickUpAudioSource.Play();
                 break;
-            case eAudioClipName.springboardSFX:
+            case eSFXAudioClipName.springboardSFX:
                 springboardAudioSource.Play();
                 break;
-            case eAudioClipName.unpauseSFX:
+            case eSFXAudioClipName.unpauseSFX:
                 unpauseAudioSource.Play();
+                break;
+        }
+    }
+
+    // Plays a specific BGM audio source based on its input, an enum called 'eBGMAudioClipName'
+    public void PlayBGM(eBGMAudioClipName clipName) {
+        // Stop playing all BGM audio sources
+        levelSelectAudioSource.Stop();
+        level1AudioSource.Stop();
+        level2AudioSource.Stop();
+        level3AudioSource.Stop();
+
+        // Play specified BGM audio source
+        switch (clipName) {
+            case eBGMAudioClipName.levelSelect:
+                levelSelectAudioSource.Play();
+                break;
+            case eBGMAudioClipName.level1:
+                level1AudioSource.Play();
+                break;
+            case eBGMAudioClipName.level2:
+                level2AudioSource.Play();
+                break;
+            case eBGMAudioClipName.level3:
+                level3AudioSource.Play();
                 break;
         }
     }
