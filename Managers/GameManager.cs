@@ -85,13 +85,15 @@ public class GameManager : MonoBehaviour {
 
     public void Loop() {
         // Pause Input
-        if (!paused) {
-            if (Input.GetButtonDown("Pause")) {
-                PauseGame();
-            }
-        } else {
-            if (Input.GetButtonDown("Pause") || Input.GetButtonDown("SNES B Button")) {
-                UnpauseGame();
+        if(GetActiveSceneName() != "Level_Selection") {
+            if (!paused) {
+                if (Input.GetButtonDown("Pause")) {
+                    PauseGame();
+                }
+            } else {
+                if (Input.GetButtonDown("Pause") || Input.GetButtonDown("SNES B Button")) {
+                    UnpauseGame();
+                }
             }
         }
     }
