@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour {
     [Header("Set in Inspector")]
@@ -83,7 +84,7 @@ public class GameManager : MonoBehaviour {
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(goBackToLevelSelectButton.gameObject);
 
         // Play SFX
-        AudioManager.S.PlaySFX(eAudioClipName.buttonPressedSFX);
+        AudioManager.S.PlaySFX(eAudioClipName.pauseAudioSource);
     }
 
     void UnpauseGame(bool unpauseTimer = true) {
@@ -105,6 +106,13 @@ public class GameManager : MonoBehaviour {
     public void GoBackToLevelSelectMenu() {
         // Deactivate gameplay UI object($, time, etc.)
         gamplayUIGameObject.SetActive(false);
+
+        // Deactivate Interactable Trigger
+        InteractableCursor.S.Deactivate();
+
+        // Reset camera position and mode
+        CameraManager.S.camMode = eCamMode.freezeCam;
+        CameraManager.S.transform.position = new Vector3(0, 0, -10);
 
         // Load Scene
         SceneManager.LoadScene("Level_Selection");
