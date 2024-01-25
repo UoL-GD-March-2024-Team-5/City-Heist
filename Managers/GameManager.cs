@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public string       firstScene;
 
     public GameObject   gamplayUIGameObject;
+    public GameObject   levelSelectionUIGameObject;
 
     public Button       goBackToLevelSelectButton;
 
@@ -52,13 +53,21 @@ public class GameManager : MonoBehaviour {
         // Add go back to level select button listener
         goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectMenu(); });
 
-        // Deactivate gameplay UI object($, time, etc.)
-        gamplayUIGameObject.SetActive(false);
-
         // Add level select button listeners
         levelButtons[0].onClick.AddListener(delegate { LevelButtonPressed(0); });
         levelButtons[1].onClick.AddListener(delegate { LevelButtonPressed(1); });
         levelButtons[2].onClick.AddListener(delegate { LevelButtonPressed(2); });
+
+        InitializeLevelSelectionScene();
+    }
+
+    // Helps sets up the level selection scene on initial load, & subsequent ones (ex. going back from pause menu)
+    public void InitializeLevelSelectionScene() {
+        // Activate level selection UI 
+        levelSelectionUIGameObject.SetActive(true);
+
+        // Deactivate gameplay UI object($, time, etc.)
+        gamplayUIGameObject.SetActive(false);
 
         // Deactivate player game object
         PlayerController.S.gameObject.SetActive(false);
@@ -115,8 +124,11 @@ public class GameManager : MonoBehaviour {
         // Activate player game object
         PlayerController.S.gameObject.SetActive(true);
 
+        // Deactivate level selection UI 
+        levelSelectionUIGameObject.SetActive(false);
+
         // Activate gameplay UI object ($, time, etc.)
-        GameManager.S.gamplayUIGameObject.SetActive(true);
+        gamplayUIGameObject.SetActive(true);
 
         // Start timer
         Timer.S.StartTimer();
@@ -184,9 +196,6 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GoBackToLevelSelectMenu() {
-        // Deactivate gameplay UI object($, time, etc.)
-        gamplayUIGameObject.SetActive(false);
-
         // Deactivate Interactable Trigger
         InteractableCursor.S.Deactivate();
 
@@ -202,6 +211,8 @@ public class GameManager : MonoBehaviour {
 
         // Unpause game without unpausing the timer
         UnpauseGame(false);
+
+        InitializeLevelSelectionScene();
     }
 
     public void InstantiateFloatingScore(GameObject targetGO, string message, Color color, float yPosOffset = 0) {
