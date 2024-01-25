@@ -35,6 +35,9 @@ public class LevelSelection : MonoBehaviour {
 
     // On button press, sets up for and loads a level scene
     public void LevelButtonPressed(int ndx) {
+        // Deactivate interactable cursor
+        InteractableCursor.S.Deactivate();
+
         // Load Scene
         SceneManager.LoadScene("Level_" + (ndx+1).ToString());
 
@@ -49,7 +52,7 @@ public class LevelSelection : MonoBehaviour {
 
         // Reset player game object position
         PlayerController.S.transform.position = Vector3.zero;
-
+        
         // Activate player game object
         PlayerController.S.gameObject.SetActive(true);
 
@@ -57,7 +60,18 @@ public class LevelSelection : MonoBehaviour {
         CameraManager.S.camMode = eCamMode.followAll;
 
         // Display text
-        List<string> startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Is it working?", "Well, it better!!!" };
+        List<string> startMessage = new List<string>();
+        switch (ndx) {
+            case 0:
+                startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "You can also press E to open doors...", "...space bar to jump...", "...P to pause...", "...and hold left shift while moving to run.", "Got it?", "Well, you better!" };
+                break;
+            case 1:
+                startMessage = new List<string>() { "Hey, this is level 2.", "Not much going on here...", "...so maybe pause the game (press P) and click the 'go back' button to get outta here." };
+                break;
+            case 2:
+                startMessage = new List<string>() { "Wow, you've started level 3!", "Still not much going on here...", "...so maybe pause the game (press P) and click the 'go back' button to get outta here." };
+                break;
+        }
         DialogueManager.S.DisplayText(startMessage);
 
         // Play SFX
