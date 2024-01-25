@@ -284,4 +284,9 @@ public class GameManager : MonoBehaviour {
         levelButtons[2].interactable = isInteractable;
         goBackToLevelSelectButton.interactable = isInteractable;
     }
+
+    // Returns name of active scene
+    public string GetActiveSceneName() {
+        return SceneManager.GetActiveScene().name;
+    }
 }
