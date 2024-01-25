@@ -93,6 +93,9 @@ public class GameManager : MonoBehaviour {
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
     // On button press, sets up for and loads a level scene
     public void LevelButtonPressed(int levelNdx) {
+        // Disable button interactivity
+        SetButtonsInteractable(false);
+
         // Close curtains
         LevelLoadTransition.S.Close();
 
@@ -154,6 +157,9 @@ public class GameManager : MonoBehaviour {
                 break;
         }
         DialogueManager.S.DisplayText(startMessage);
+
+        // Enable button interactivity
+        SetButtonsInteractable(true);
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
@@ -198,6 +204,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GoBackToLevelSelectButtonPressed() {
+        // Disable button interactivity
+        SetButtonsInteractable(false);
+
         // Close curtains
         LevelLoadTransition.S.Close();
 
@@ -229,6 +238,9 @@ public class GameManager : MonoBehaviour {
         UnpauseGame(false);
 
         InitializeLevelSelectionScene();
+
+        // Enable button interactivity
+        SetButtonsInteractable(true);
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
@@ -258,5 +270,13 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    // Used to prevent the user from clicking buttons additional times after they've already been pressed
+    void SetButtonsInteractable(bool isInteractable) {
+        levelButtons[0].interactable = isInteractable;
+        levelButtons[1].interactable = isInteractable;
+        levelButtons[2].interactable = isInteractable;
+        goBackToLevelSelectButton.interactable = isInteractable;
     }
 }
