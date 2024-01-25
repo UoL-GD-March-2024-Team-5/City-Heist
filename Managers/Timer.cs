@@ -77,7 +77,7 @@ public class Timer : MonoBehaviour {
 
         // Loop this coroutine
         //yield return new WaitForFixedUpdate();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSecondsRealtime(1);
 		StartCoroutine("DecrementTimeCoroutine");
 	}
 }
