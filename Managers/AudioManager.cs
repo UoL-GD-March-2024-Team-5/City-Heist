@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eAudioClipName { buttonPressedSFX, pickUpSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, unpauseSFX };
+public enum eAudioClipName { buttonPressedSFX, pickUpSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
 
 public class AudioManager : MonoBehaviour {
     [Header("Set in Inspector")]
@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour {
     public AudioSource dialogueAudioSource;
     public AudioSource dialogueEndAudioSource;
     public AudioSource doorOpenAudioSource;
+    public AudioSource pauseAudioSource;
     public AudioSource pickUpAudioSource;
     public AudioSource springboardAudioSource;
     public AudioSource unpauseAudioSource;
@@ -60,6 +61,9 @@ public class AudioManager : MonoBehaviour {
                 break;
             case eAudioClipName.doorOpenSFX:
                 doorOpenAudioSource.Play();
+                break;
+            case eAudioClipName.pauseAudioSource:
+                pauseAudioSource.Play();
                 break;
             case eAudioClipName.pickUpSFX:
                 pickUpAudioSource.Play();
