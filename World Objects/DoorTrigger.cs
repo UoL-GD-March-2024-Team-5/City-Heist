@@ -45,6 +45,7 @@ public class DoorTrigger : MonoBehaviour {
         triggerColl.enabled = false;
 
         // Deactivate Interactable Trigger
+        InteractableCursor.S.Deactivate();
 
         // Play SFX
         AudioManager.S.PlaySFX(eAudioClipName.doorOpenSFX);
@@ -55,7 +56,7 @@ public class DoorTrigger : MonoBehaviour {
             playerIsInTrigger = true;
 
             // Activate Interactable Trigger
-
+            InteractableCursor.S.Activate(gameObject);
         }
     }
 
@@ -64,7 +65,7 @@ public class DoorTrigger : MonoBehaviour {
             playerIsInTrigger = false;
 
             // Deactivate Interactable Trigger
-
+            InteractableCursor.S.Deactivate();
         }
     }
 }
