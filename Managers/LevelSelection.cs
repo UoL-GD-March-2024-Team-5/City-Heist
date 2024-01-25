@@ -59,22 +59,25 @@ public class LevelSelection : MonoBehaviour {
         // Switch cam mode to follow player game object
         CameraManager.S.camMode = eCamMode.followAll;
 
-        // Display text
+        // Display text & play BGM
         List<string> startMessage = new List<string>();
         switch (ndx) {
             case 0:
-                startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "You can also press E to open doors...", "...space bar to jump...", "...P to pause...", "...and hold left shift while moving to run.", "Got it?", "Well, you better!" };
+                startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "You can also press E to open doors...", "...space bar to jump...", "...P or Esc to pause...", "...and hold left shift while moving to run.", "Got it?", "Well, you better!" };
+                AudioManager.S.PlayBGM(eBGMAudioClipName.level1);
                 break;
             case 1:
-                startMessage = new List<string>() { "Hey, this is level 2.", "Not much going on here...", "...so maybe pause the game (press P) and click the 'go back' button to get outta here." };
+                startMessage = new List<string>() { "Hey, this is level 2.", "Not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
+                AudioManager.S.PlayBGM(eBGMAudioClipName.level2);
                 break;
             case 2:
-                startMessage = new List<string>() { "Wow, you've started level 3!", "Still not much going on here...", "...so maybe pause the game (press P) and click the 'go back' button to get outta here." };
+                startMessage = new List<string>() { "Wow, you've started level 3!", "Still not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
+                AudioManager.S.PlayBGM(eBGMAudioClipName.level3);
                 break;
         }
         DialogueManager.S.DisplayText(startMessage);
 
         // Play SFX
-        AudioManager.S.PlaySFX(eAudioClipName.buttonPressedSFX);
+        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
     }
 }
