@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
         UpdateManager.updateDelegate += Loop;
 
         // Add go back to level select button listener
-        goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectMenu(); });
+        goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectButtonPressed(); });
 
         // Add level select button listeners
         levelButtons[0].onClick.AddListener(delegate { LevelButtonPressed(0); });
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
     // On button press, sets up for and loads a level scene
     public void LevelButtonPressed(int levelNdx) {
         // Close curtains
@@ -155,6 +156,7 @@ public class GameManager : MonoBehaviour {
         DialogueManager.S.DisplayText(startMessage);
     }
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
     void PauseGame() {
         // Pause timer
         Timer.S.PauseTimer();
@@ -195,13 +197,27 @@ public class GameManager : MonoBehaviour {
         AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
     }
 
-    public void GoBackToLevelSelectMenu() {
+    public void GoBackToLevelSelectButtonPressed() {
+        // Close curtains
+        LevelLoadTransition.S.Close();
+
         // Deactivate Interactable Trigger
         InteractableCursor.S.Deactivate();
 
         // Reset camera position and mode
         CameraManager.S.camMode = eCamMode.freezeCam;
         CameraManager.S.transform.position = new Vector3(0, 0, -10);
+
+        // Wait, then go back to level select
+        StartCoroutine(GoBackToLevelSelect());
+    }
+
+    public IEnumerator GoBackToLevelSelect() {
+        // Wait
+        yield return new WaitForSecondsRealtime(1f);
+
+        // Open curtains
+        LevelLoadTransition.S.Open();
 
         // Load Scene
         SceneManager.LoadScene("Level_Selection");
@@ -215,6 +231,7 @@ public class GameManager : MonoBehaviour {
         InitializeLevelSelectionScene();
     }
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
     public void InstantiateFloatingScore(GameObject targetGO, string message, Color color, float yPosOffset = 0) {
         // Instantiate floating Score game object, & set its position to that of the target game object
         GameObject floatingScore = Instantiate(floatingScoreGO, targetGO.transform.position, Quaternion.identity);
