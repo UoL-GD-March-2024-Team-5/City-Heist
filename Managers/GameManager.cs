@@ -72,6 +72,12 @@ public class GameManager : MonoBehaviour {
         // Deactivate player game object
         PlayerController.S.gameObject.SetActive(false);
 
+        // Prevent dynamically selected button from playing 'Selection' SFX
+        OnSelectPlaySound onSelectPlaySound = levelButtons[0].GetComponent<OnSelectPlaySound>();
+        if (onSelectPlaySound) {
+            onSelectPlaySound.playSFXOnFirstTimeSelected = false;
+        }
+
         // Set selected game object
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[0].gameObject);
