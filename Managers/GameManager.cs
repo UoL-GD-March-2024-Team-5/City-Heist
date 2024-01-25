@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour {
         AudioManager.S.PlaySFX(eSFXAudioClipName.pauseAudioSource);
     }
 
-    void UnpauseGame(bool unpauseTimer = true) {
+    void UnpauseGame(bool unpauseTimer = true, bool playSFX = true) {
         // Unpause timer
         if (unpauseTimer) {
             Timer.S.UnpauseTimer();
@@ -200,7 +200,9 @@ public class GameManager : MonoBehaviour {
         pauseMenu.SetActive(false);
 
         // Play SFX
-        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+        if (playSFX) {
+            AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+        }
     }
 
     public void GoBackToLevelSelectButtonPressed() {
@@ -216,6 +218,9 @@ public class GameManager : MonoBehaviour {
         // Reset camera position and mode
         CameraManager.S.camMode = eCamMode.freezeCam;
         CameraManager.S.transform.position = new Vector3(0, 0, -10);
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
 
         // Wait, then go back to level select
         StartCoroutine(GoBackToLevelSelect());
@@ -234,8 +239,8 @@ public class GameManager : MonoBehaviour {
         // Play BGM
         AudioManager.S.PlayBGM(eBGMAudioClipName.levelSelect);
 
-        // Unpause game without unpausing the timer
-        UnpauseGame(false);
+        // Unpause game without unpausing the timer or playing any SFX
+        UnpauseGame(false, false);
 
         InitializeLevelSelectionScene();
 
