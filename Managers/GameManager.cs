@@ -1,8 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour {
     [Header("Set in Inspector")]
@@ -13,6 +14,8 @@ public class GameManager : MonoBehaviour {
     public Button       goBackToLevelSelectButton;
 
     public GameObject   floatingScoreGO;
+
+    public List<Button> levelButtons;
 
     [Header("Set Dynamically")]
     // Pause
@@ -51,6 +54,18 @@ public class GameManager : MonoBehaviour {
 
         // Deactivate gameplay UI object($, time, etc.)
         gamplayUIGameObject.SetActive(false);
+
+        // Add level select button listeners
+        levelButtons[0].onClick.AddListener(delegate { LevelButtonPressed(0); });
+        levelButtons[1].onClick.AddListener(delegate { LevelButtonPressed(1); });
+        levelButtons[2].onClick.AddListener(delegate { LevelButtonPressed(2); });
+
+        // Deactivate player game object
+        PlayerController.S.gameObject.SetActive(false);
+
+        // Set selected game object
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[0].gameObject);
     }
 
     public void Loop() {
@@ -64,6 +79,68 @@ public class GameManager : MonoBehaviour {
                 UnpauseGame();
             }
         }
+    }
+
+    // On button press, sets up for and loads a level scene
+    public void LevelButtonPressed(int levelNdx) {
+        // Close curtains
+        LevelLoadTransition.S.Close();
+
+        // Deactivate interactable cursor
+        InteractableCursor.S.Deactivate();
+
+        // Reset player game object position
+        PlayerController.S.transform.position = Vector3.zero;
+
+        // Switch cam mode to follow player game object
+        CameraManager.S.camMode = eCamMode.followAll;
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
+
+        // Wait, then load level
+        StartCoroutine(LoadLevel(levelNdx));
+    }
+
+    public IEnumerator LoadLevel(int levelNdx) {
+        // Wait
+        yield return new WaitForSecondsRealtime(1f);
+
+        // Open curtains
+        LevelLoadTransition.S.Open();
+
+        // Load Scene
+        SceneManager.LoadScene("Level_" + (levelNdx + 1).ToString());
+
+        // Activate player game object
+        PlayerController.S.gameObject.SetActive(true);
+
+        // Activate gameplay UI object ($, time, etc.)
+        GameManager.S.gamplayUIGameObject.SetActive(true);
+
+        // Start timer
+        Timer.S.StartTimer();
+
+        // Reset score/total value of stolen items
+        ScoreManager.S.ResetScore();
+
+        // Display text & play BGM
+        List<string> startMessage = new List<string>();
+        switch (levelNdx) {
+            case 0:
+                startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "You can also press E to open doors...", "...space bar to jump...", "...P or Esc to pause...", "...and hold left shift while moving to run.", "Got it?", "Well, you better!" };
+                AudioManager.S.PlayBGM(eBGMAudioClipName.level1);
+                break;
+            case 1:
+                startMessage = new List<string>() { "Hey, this is level 2.", "Not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
+                AudioManager.S.PlayBGM(eBGMAudioClipName.level2);
+                break;
+            case 2:
+                startMessage = new List<string>() { "Wow, you've started level 3!", "Still not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
+                AudioManager.S.PlayBGM(eBGMAudioClipName.level3);
+                break;
+        }
+        DialogueManager.S.DisplayText(startMessage);
     }
 
     void PauseGame() {
