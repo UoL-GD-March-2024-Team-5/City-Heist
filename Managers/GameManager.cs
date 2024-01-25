@@ -96,6 +96,9 @@ public class GameManager : MonoBehaviour {
         paused = false;
         Physics2D.gravity = new Vector2(0, -15f);
 
+        // Deactivate Interactable Trigger
+        InteractableCursor.S.Deactivate();
+
         // Deactivate pause menu
         pauseMenu.SetActive(false);
 
