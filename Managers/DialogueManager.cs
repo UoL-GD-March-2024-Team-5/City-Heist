@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,7 +49,7 @@ public class DialogueManager : MonoBehaviour {
                 }
 
                 // Play SFX
-                AudioManager.S.PlaySFX(eAudioClipName.dialogueEndSFX);
+                AudioManager.S.PlaySFX(eSFXAudioClipName.dialogueEndSFX);
             }
         }  
     }
@@ -77,6 +76,9 @@ public class DialogueManager : MonoBehaviour {
         // Freeze Player
         PlayerController.S.canMove = false;
 
+        // Set player velocity to 0
+        PlayerController.S.rigid.velocity = Vector2.zero;
+
         // Deactivate Cursor
         cursorGO.SetActive(false);
 
@@ -97,7 +99,7 @@ public class DialogueManager : MonoBehaviour {
             // Display text one word at a time
             for (int i = 0; i < dialogueWords.Length; i++) {
                 // Play SFX
-                AudioManager.S.PlaySFX(eAudioClipName.dialogueSFX);
+                AudioManager.S.PlaySFX(eSFXAudioClipName.dialogueSFX);
 
                 dialogueSentences += dialogueWords[i] + " ";
                 this.dialogueText.text = dialogueSentences;
