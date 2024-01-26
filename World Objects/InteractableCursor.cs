@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using static UnityEditor.PlayerSettings;
 
 // Contains scripts related to on player trigger enter an interactable game object's trigger, activate and display a cursor
 // above said object to help indicate that the user can interact with it.
@@ -22,7 +20,7 @@ public class InteractableCursor : MonoBehaviour {
     public void Activate(GameObject newParentGO) {
         // Set cursor position to slighlty above target game object
         Vector2 tPos = newParentGO.transform.position;
-        tPos.y += 0.25f;
+        tPos.y += 0.5f;
         cursorGO.transform.position = tPos;
 
         // Set the cursor's parent game object

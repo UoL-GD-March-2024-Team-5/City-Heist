@@ -5,10 +5,12 @@ using UnityEngine;
 // On button press while intersected with PlayerTrigger, opens this door (changes sprite, & deactivates collider & trigger).
 public class DoorTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
+    public bool             doorIsLocked;
+
     public bool             doorOpensToLeft;
 
     public string           doorIsLockedMessage = "This door is locked. Find a key!";
-    public string           doorIsUnlockedMessage = "Great! You unlocked the door!";
+    public string           doorIsUnlockedMessage = "Great, you unlocked the door. Now open it!";
 
     public Sprite           closedDoorSprite, openDoorLeftSprite, openDoorRightSprite;
 
@@ -27,7 +29,33 @@ public class DoorTrigger : MonoBehaviour {
     public void Update() {
         if (playerIsInTrigger) {
             if (Input.GetKeyDown(KeyCode.E)) {
-                OpenDoor();
+                if (!doorIsLocked) {
+                    OpenDoor();
+                } else {
+                    if(KeyManager.S.keyCount > 0) {
+                        // Display text
+                        DialogueManager.S.DisplayText(doorIsUnlockedMessage);
+
+                        // Unlock door
+                        doorIsLocked = false;
+
+                        // Decrement key count
+                        KeyManager.S.IncrementKeyCount(-1);
+
+                        // Play SFX
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.springboardSFX);
+                    } else {
+                        // Display text
+                        DialogueManager.S.DisplayText(doorIsLockedMessage);
+
+                        // Play SFX
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+                    }
+
+                    // Prevents calling DisplayText() above repeatedly on button press,
+                    // and instead allows the DialogueManager to deactivate the text box.
+                    playerIsInTrigger = false;
+                }
             }
         }
     }
@@ -48,7 +76,7 @@ public class DoorTrigger : MonoBehaviour {
         InteractableCursor.S.Deactivate();
 
         // Play SFX
-        AudioManager.S.PlaySFX(eAudioClipName.doorOpenSFX);
+        AudioManager.S.PlaySFX(eSFXAudioClipName.doorOpenSFX);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
