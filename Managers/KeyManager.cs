@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Stores and displays the number of keys has collected and not used yet
+// Stores and displays the number of keys the player has collected and not used yet
 public class KeyManager : MonoBehaviour {
     [Header("Set in Inspector")]
     public Text keyCountText;
