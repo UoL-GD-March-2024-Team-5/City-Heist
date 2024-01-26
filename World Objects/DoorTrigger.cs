@@ -44,6 +44,8 @@ public class DoorTrigger : MonoBehaviour {
 
                         // Play SFX
                         AudioManager.S.PlaySFX(eSFXAudioClipName.springboardSFX);
+
+                        OpenDoor();
                     } else {
                         // Display text
                         DialogueManager.S.DisplayText(doorIsLockedMessage);
