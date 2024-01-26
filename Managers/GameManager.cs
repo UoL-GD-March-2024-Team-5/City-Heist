@@ -148,6 +148,9 @@ public class GameManager : MonoBehaviour {
         // Reset score/total value of stolen items
         ScoreManager.S.ResetScore();
 
+        // Reset key count
+        KeyManager.S.ResetKeyCount();
+
         // Display text & play BGM
         List<string> startMessage = new List<string>();
         switch (levelNdx) {
