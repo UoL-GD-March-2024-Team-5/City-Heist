@@ -13,8 +13,8 @@ public class KeyTrigger : MonoBehaviour {
             // Deactivate gameObject
             gameObject.SetActive(false);
 
-            // Freeze Player
-            PlayerController.S.canMove = false;
+            // Set gravity to 0
+            Physics2D.gravity = Vector2.zero;
 
             // Increment key count by one
             KeyManager.S.IncrementKeyCount(1);
