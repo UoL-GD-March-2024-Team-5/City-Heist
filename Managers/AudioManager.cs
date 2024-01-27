@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum eSFXAudioClipName { buttonPressedSFX, itemTriggerSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
-public enum eBGMAudioClipName { levelSelect, level1, level2, level3 };
+public enum eBGMAudioClipName { levelSelect, level1, level2, level3, win };
 
 public class AudioManager : MonoBehaviour {
     [Header("Set in Inspector")]
@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour {
     public AudioSource level1AudioSource;
     public AudioSource level2AudioSource;
     public AudioSource level3AudioSource;
+    public AudioSource winAudioSource;
 
     // SFX audio sources
     public AudioSource buttonPressedAudioSource;
@@ -88,6 +89,7 @@ public class AudioManager : MonoBehaviour {
         level1AudioSource.Stop();
         level2AudioSource.Stop();
         level3AudioSource.Stop();
+        winAudioSource.Stop();
 
         // Play specified BGM audio source
         switch (clipName) {
@@ -102,6 +104,9 @@ public class AudioManager : MonoBehaviour {
                 break;
             case eBGMAudioClipName.level3:
                 level3AudioSource.Play();
+                break;
+            case eBGMAudioClipName.win:
+                winAudioSource.Play();
                 break;
         }
     }
