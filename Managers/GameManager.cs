@@ -179,6 +179,8 @@ public class GameManager : MonoBehaviour {
         Timer.S.PauseTimer();
 
         paused = true;
+
+        // Set gravity to 0
         Physics2D.gravity = Vector2.zero;
 
         // Activate pause menu
@@ -202,6 +204,8 @@ public class GameManager : MonoBehaviour {
         }
 
         paused = false;
+
+        // Reset gravity to its normal value
         Physics2D.gravity = new Vector2(0, -15f);
 
         // Deactivate Interactable Trigger
@@ -226,10 +230,6 @@ public class GameManager : MonoBehaviour {
         // Deactivate Interactable Trigger
         InteractableCursor.S.Deactivate();
 
-        // Reset camera position and mode
-        CameraManager.S.camMode = eCamMode.freezeCam;
-        CameraManager.S.transform.position = new Vector3(0, 0, -10);
-
         // Play SFX
         AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
 
@@ -240,6 +240,10 @@ public class GameManager : MonoBehaviour {
     public IEnumerator GoBackToLevelSelect() {
         // Wait
         yield return new WaitForSecondsRealtime(1f);
+
+        // Reset camera position and mode
+        CameraManager.S.camMode = eCamMode.freezeCam;
+        CameraManager.S.transform.position = new Vector3(0, 0, -10);
 
         // Open curtains
         LevelLoadTransition.S.Open();
