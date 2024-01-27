@@ -96,4 +96,25 @@ public class AudioManager : MonoBehaviour {
             case eBGMAudioClipName.win: bgmCS[4].Play(); break;
         }
     }
+
+    // Plays a short jingle, then when it's over, resumes playback of the BGM that was playing previously
+    public IEnumerator PlayShortJingleThenResumePreviousBGM(int ndx) {
+        // Get current BGM's playback time, then stop its playback
+        float time = bgmCS[currentSongNdx].time;
+        bgmCS[currentSongNdx].Stop();
+
+        // Play the jingle
+        bgmCS[ndx].Play();
+
+        // Get length of the jingle 
+        AudioClip a = bgmCS[ndx].clip;
+        float songLength = a.length + 1;
+
+        // Wait until jingle is done playing
+        yield return new WaitForSecondsRealtime(songLength);
+
+        // Resume playback of the BGM that was playing previously
+        bgmCS[currentSongNdx].time = time;
+        bgmCS[currentSongNdx].Play();
+    }
 }
