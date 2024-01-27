@@ -7,13 +7,8 @@ public enum eBGMAudioClipName { levelSelect, level1, level2, level3, win };
 
 public class AudioManager : MonoBehaviour {
     [Header("Set in Inspector")]
-    // BGM audio source
-    public AudioSource bgmAudioSource;
-    public AudioSource levelSelectAudioSource;
-    public AudioSource level1AudioSource;
-    public AudioSource level2AudioSource;
-    public AudioSource level3AudioSource;
-    public AudioSource winAudioSource;
+    // BGM audio sources
+    public List<AudioSource> bgmCS = new List<AudioSource>();
 
     // SFX audio sources
     public AudioSource buttonPressedAudioSource;
@@ -25,8 +20,8 @@ public class AudioManager : MonoBehaviour {
     public AudioSource springboardAudioSource;
     public AudioSource unpauseAudioSource;
 
-    // BGM audio clip
-    public AudioClip bgm;
+    [Header("Set Dynamically")]
+    public int currentSongNdx;
 
     // Singleton
     private static AudioManager _S;
@@ -84,30 +79,21 @@ public class AudioManager : MonoBehaviour {
 
     // Plays a specific BGM audio source based on its input, an enum called 'eBGMAudioClipName'
     public void PlayBGM(eBGMAudioClipName clipName) {
-        // Stop playing all BGM audio sources
-        levelSelectAudioSource.Stop();
-        level1AudioSource.Stop();
-        level2AudioSource.Stop();
-        level3AudioSource.Stop();
-        winAudioSource.Stop();
+        // Set current song index
+        currentSongNdx = (int)clipName;
 
-        // Play specified BGM audio source
+        // Stop ALL BGM
+        for (int i = 0; i < bgmCS.Count; i++) {
+            bgmCS[i].Stop();
+        }
+
+        // Play song
         switch (clipName) {
-            case eBGMAudioClipName.levelSelect:
-                levelSelectAudioSource.Play();
-                break;
-            case eBGMAudioClipName.level1:
-                level1AudioSource.Play();
-                break;
-            case eBGMAudioClipName.level2:
-                level2AudioSource.Play();
-                break;
-            case eBGMAudioClipName.level3:
-                level3AudioSource.Play();
-                break;
-            case eBGMAudioClipName.win:
-                winAudioSource.Play();
-                break;
+            case eBGMAudioClipName.levelSelect: bgmCS[0].Play(); break;
+            case eBGMAudioClipName.level1: bgmCS[1].Play(); break;
+            case eBGMAudioClipName.level2: bgmCS[2].Play(); break;
+            case eBGMAudioClipName.level3: bgmCS[3].Play(); break;
+            case eBGMAudioClipName.win: bgmCS[4].Play(); break;
         }
     }
 }
