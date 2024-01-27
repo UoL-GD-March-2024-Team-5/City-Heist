@@ -141,5 +141,8 @@ public class DialogueManager : MonoBehaviour {
 
         // Unfreeze Player
         PlayerController.S.canMove = true;
+
+        // Reset gravity to its normal value
+        Physics2D.gravity = new Vector2(0, -15f);
     }
 }
