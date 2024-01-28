@@ -42,8 +42,8 @@ public class DoorTrigger : MonoBehaviour {
                         // Decrement key count
                         KeyManager.S.IncrementKeyCount(-1);
 
-                        // Play SFX
-                        AudioManager.S.PlaySFX(eSFXAudioClipName.springboardSFX);
+                        // Play short celebratory jingle, then resume playing previous played BGM
+                        StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(4));
 
                         OpenDoor();
                     } else {
