@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eSFXAudioClipName { buttonPressedSFX, itemTriggerSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
+public enum eSFXAudioClipName { buttonPressedSFX, buttonSelectedSFX, itemTriggerSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
 public enum eBGMAudioClipName { levelSelect, level1, level2, level3, win };
 
 public class AudioManager : MonoBehaviour {
@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour {
 
     // SFX audio sources
     public AudioSource buttonPressedAudioSource;
+    public AudioSource buttonSelectedAudioSource;
     public AudioSource dialogueAudioSource;
     public AudioSource dialogueEndAudioSource;
     public AudioSource doorOpenAudioSource;
@@ -52,6 +53,9 @@ public class AudioManager : MonoBehaviour {
         switch (clipName) {
             case eSFXAudioClipName.buttonPressedSFX:
                 buttonPressedAudioSource.Play();
+                break;
+            case eSFXAudioClipName.buttonSelectedSFX:
+                buttonSelectedAudioSource.Play();
                 break;
             case eSFXAudioClipName.dialogueSFX:
                 dialogueAudioSource.Play();
