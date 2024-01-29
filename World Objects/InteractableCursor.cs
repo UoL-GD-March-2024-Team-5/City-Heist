@@ -17,10 +17,10 @@ public class InteractableCursor : MonoBehaviour {
     }
 
     // Activates and positions cursor game object slightly above target game object
-    public void Activate(GameObject newParentGO) {
+    public void Activate(GameObject newParentGO, float yPosOffset = 0.5f) {
         // Set cursor position to slighlty above target game object
         Vector2 tPos = newParentGO.transform.position;
-        tPos.y += 0.5f;
+        tPos.y += yPosOffset;
         cursorGO.transform.position = tPos;
 
         // Set the cursor's parent game object
