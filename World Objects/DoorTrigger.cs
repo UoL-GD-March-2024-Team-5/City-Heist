@@ -33,25 +33,9 @@ public class DoorTrigger : MonoBehaviour {
                     OpenDoor();
                 } else {
                     if(KeyManager.S.keyCount > 0) {
-                        // Display text
-                        DialogueManager.S.DisplayText(doorIsUnlockedMessage);
-
-                        // Unlock door
-                        doorIsLocked = false;
-
-                        // Decrement key count
-                        KeyManager.S.IncrementKeyCount(-1);
-
-                        // Play short celebratory jingle, then resume playing previous played BGM
-                        StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(4));
-
-                        OpenDoor();
+                        UnlockAndOpenDoor();
                     } else {
-                        // Display text
-                        DialogueManager.S.DisplayText(doorIsLockedMessage);
-
-                        // Play SFX
-                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+                        DoorIsLocked();
                     }
 
                     // Prevents calling DisplayText() above repeatedly on button press,
@@ -63,7 +47,7 @@ public class DoorTrigger : MonoBehaviour {
     }
 
     void OpenDoor() {
-        // Change sprite
+        // Swap sprite
         if (doorOpensToLeft) {
             sRend.sprite = openDoorLeftSprite;
         } else {
@@ -79,6 +63,30 @@ public class DoorTrigger : MonoBehaviour {
 
         // Play SFX
         AudioManager.S.PlaySFX(eSFXAudioClipName.doorOpenSFX);
+    }
+
+    void UnlockAndOpenDoor() {
+        // Display text
+        DialogueManager.S.DisplayText(doorIsUnlockedMessage);
+
+        // Unlock door
+        doorIsLocked = false;
+
+        // Decrement key count
+        KeyManager.S.IncrementKeyCount(-1);
+
+        // Play short celebratory jingle, then resume playing previous played BGM
+        StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(4));
+
+        OpenDoor();
+    }
+
+    void DoorIsLocked() {
+        // Display text
+        DialogueManager.S.DisplayText(doorIsLockedMessage);
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
