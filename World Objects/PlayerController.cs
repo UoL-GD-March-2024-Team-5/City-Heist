@@ -37,11 +37,13 @@ public class PlayerController : MonoBehaviour {
 	public bool				canMove = true;
 
 	// Components
-	public Rigidbody2D		rigid;
-	private Animator		anim;
+	public Rigidbody2D			rigid;
+	private Animator			anim;
+    private CircleCollider2D	circleColl;
+    private SpriteRenderer		sRend;
 
-	// Singleton
-	private static PlayerController _S;
+    // Singleton
+    private static PlayerController _S;
 	public static PlayerController S { get { return _S; } set { _S = value; } }
 
     // DontDestroyOnLoad
@@ -62,9 +64,11 @@ public class PlayerController : MonoBehaviour {
         // Get Components
         rigid = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
+        circleColl = GetComponent<CircleCollider2D>();
+        sRend = GetComponent<SpriteRenderer>();
 
-		// Add Loop() to UpdateManager
-		UpdateManager.updateDelegate += Loop;
+        // Add Loop() to UpdateManager
+        UpdateManager.updateDelegate += Loop;
 		// Add FixedLoop() to UpdateManager
 		UpdateManager.fixedUpdateDelegate += FixedLoop;
 	}
@@ -314,5 +318,18 @@ public class PlayerController : MonoBehaviour {
 	public void SetAnim(string animName = "Player_Idle", int animSpeed = 1) {
         anim.speed = animSpeed;
         anim.CrossFade(animName, 0);
+    }
+
+	// Methods for when interacting with a hideable spot that set whether
+	// the player can move, is visible, and their collider is active
+	public void Hide() {
+		canMove = false;
+        circleColl.enabled = false;
+		sRend.enabled = false; 
+	}
+    public void StopHiding() {
+        canMove = false;
+        circleColl.enabled = false;
+        sRend.enabled = false;
     }
 }
