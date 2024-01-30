@@ -37,9 +37,8 @@ public class PlayerController : MonoBehaviour {
 	public bool				canMove = true;
 
 	// Components
-	public Rigidbody2D			rigid;
-	private CircleCollider2D	circleColl;
-	private Animator			anim;
+	public Rigidbody2D		rigid;
+	private Animator		anim;
 
 	// Singleton
 	private static PlayerController _S;
@@ -62,7 +61,6 @@ public class PlayerController : MonoBehaviour {
 
         // Get Components
         rigid = GetComponent<Rigidbody2D>();
-		circleColl = GetComponent<CircleCollider2D>();
 		anim = GetComponent<Animator>();
 
 		// Add Loop() to UpdateManager
@@ -80,7 +78,7 @@ public class PlayerController : MonoBehaviour {
 		transform.position = respawnPos;
 	}
 
-	void InputWalk() {
+	void CheckForWalkInput() {
 		if (Input.GetAxisRaw("Attack/Run") <= 0 && Input.GetAxisRaw("Horizontal") > 0f) {
 			mode = ePlayerMode.walkRight;
 		} else if (Input.GetAxisRaw("Attack/Run") <= 0 && Input.GetAxisRaw("Horizontal") < 0f) {
@@ -88,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void InputRun() {
+	void CheckForRunInput() {
 		if (Input.GetAxisRaw("Horizontal") > 0f && Input.GetAxisRaw("Attack/Run") > 0) {
 			mode = ePlayerMode.runRight;
 		} else if (Input.GetAxisRaw("Horizontal") < 0f && Input.GetAxisRaw("Attack/Run") > 0) {
@@ -96,7 +94,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void InputJump(float speed) {
+	void CheckForJumpInput(float speed) {
 		if (isGrounded) {
 			if (Input.GetButtonDown("MyJump")) {
 				rigid.velocity = Vector3.up * speed;
@@ -109,48 +107,49 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	public void Loop () {
+    // Check for player input, then execute the desired action
+    public void Loop () {
         if (!GameManager.S.paused && canMove) {
 			switch (mode) {
 				case ePlayerMode.idle:
 					// Attack
 					if (Input.GetAxisRaw("Attack/Run") > 0 && isGrounded) { mode = ePlayerMode.attack; }
 					// Walk 
-					InputWalk();
+					CheckForWalkInput();
 					// Run
-					InputRun();
+					CheckForRunInput();
 					// Jump
-					InputJump(jumpSpeed);
+					CheckForJumpInput(jumpSpeed);
 					break;
 				case ePlayerMode.walkLeft:
 					// Idle
 					if (Input.GetAxisRaw("Horizontal") >= 0) {
-						SetMode();
-					}
+                        mode = ePlayerMode.idle;
+                    }
 					// Run Left
 					if (Input.GetAxisRaw("Horizontal") < 0f && Input.GetAxisRaw("Attack/Run") > 0) {
 						mode = ePlayerMode.runLeft;
 					}
 					// Jump
-					InputJump(jumpSpeed);
+					CheckForJumpInput(jumpSpeed);
 					break;
 				case ePlayerMode.walkRight:
 					// Idle
 					if (Input.GetAxisRaw("Horizontal") <= 0) {
-						SetMode();
-					}
+                        mode = ePlayerMode.idle;
+                    }
 					// Run Right
 					if (Input.GetAxisRaw("Horizontal") > 0f && Input.GetAxisRaw("Attack/Run") > 0) {
 						mode = ePlayerMode.runRight;
 					}
 					// Jump
-					InputJump(jumpSpeed);
+					CheckForJumpInput(jumpSpeed);
 					break;
 				case ePlayerMode.runLeft:
 					// Idle
 					if (Input.GetAxisRaw("Horizontal") >= 0) {
-						SetMode();
-					}
+                        mode = ePlayerMode.idle;
+                    }
 					// Walk Left
 					if (Input.GetAxisRaw("Horizontal") < 0f && Input.GetAxisRaw("Attack/Run") <= 0) {
 						mode = ePlayerMode.walkLeft;
@@ -160,13 +159,13 @@ public class PlayerController : MonoBehaviour {
 						mode = ePlayerMode.runRight;
 					}
 					// Jump
-					InputJump(jumpSpeed);
+					CheckForJumpInput(jumpSpeed);
 					break;
 				case ePlayerMode.runRight:
 					// Idle
 					if (Input.GetAxisRaw("Horizontal") <= 0) {
-						SetMode();
-					}
+                        mode = ePlayerMode.idle;
+                    }
 					// Walk Right
 					if (Input.GetAxisRaw("Horizontal") > 0f && Input.GetAxisRaw("Attack/Run") <= 0) {
 						mode = ePlayerMode.walkRight;
@@ -176,26 +175,28 @@ public class PlayerController : MonoBehaviour {
 						mode = ePlayerMode.runLeft;
 					}
 					// Jump
-					InputJump(jumpSpeed);
+					CheckForJumpInput(jumpSpeed);
 					break;
 				case ePlayerMode.attack:
 					// Idle
-					if (Input.GetAxisRaw("Attack/Run") <= 0) { SetMode(); }
+					if (Input.GetAxisRaw("Attack/Run") <= 0) {
+                        mode = ePlayerMode.idle;
+                    }
 					// Walk
-					InputWalk();
+					CheckForWalkInput();
 					// Run
-					InputRun();
+					CheckForRunInput();
 					// Jump
-					InputJump(jumpSpeed);
+					CheckForJumpInput(jumpSpeed);
 					break;
 				case ePlayerMode.jumpFull:
 					if (isGrounded) {
 						// Attack
 						if (Input.GetAxisRaw("Attack/Run") > 0) { mode = ePlayerMode.attack; }
 						// Walk 
-						InputWalk();
+						CheckForWalkInput();
 						// Run
-						InputRun();
+						CheckForRunInput();
 					}
 					break;
 				case ePlayerMode.jumpHalf:
@@ -203,9 +204,9 @@ public class PlayerController : MonoBehaviour {
 						// Attack
 						if (Input.GetAxisRaw("Attack/Run") > 0) { mode = ePlayerMode.attack; }
 						// Walk 
-						InputWalk();
+						CheckForWalkInput();
 						// Run
-						InputRun();
+						CheckForRunInput();
 					}
 					break;
 			}
@@ -215,10 +216,10 @@ public class PlayerController : MonoBehaviour {
 	public void FixedLoop() {
         if (gameObject.activeInHierarchy) {
 			if (!GameManager.S.paused && canMove) {
-				// Grounded
+				// Check and set whether the player is grounded
 				isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-				// Flip
+				// Flip the player's sprite to face left or right depending on which direction button they've last pressed
 				if (Input.GetAxisRaw("Horizontal") > 0 && !facingRight) {
 					Flip();
 				} else if (Input.GetAxisRaw("Horizontal") < 0 && facingRight) {
@@ -232,16 +233,17 @@ public class PlayerController : MonoBehaviour {
 				vel.x *= 1.0f - drag;
 				rigid.velocity = vel;
 
-				// Jump Animation
+				// Play jump animation if not grounded 
 				if (!isGrounded) {
 					if (mode != ePlayerMode.attack && mode != ePlayerMode.nada) {
 						SetAnim("Player_Jump", 0);
 					}
 				}
 
-				switch (mode) {
+                // Depending on the player's mode, set its velocity and which animation clip to play
+                switch (mode) {
 					case ePlayerMode.idle:
-						// Anim
+						// Set animation clip
 						if (isGrounded) {
 							SetAnim("Player_Idle");
 						} else {
@@ -252,7 +254,7 @@ public class PlayerController : MonoBehaviour {
 						// Set velocity
 						rigid.velocity = new Vector2(-moveSpeed, rigid.velocity.y);
 
-						// Anim
+						// Set animation clip
 						if (isGrounded) {
 							SetAnim("Player_Walk");
 						}
@@ -261,29 +263,29 @@ public class PlayerController : MonoBehaviour {
 						// Set velocity
 						rigid.velocity = new Vector2(moveSpeed, rigid.velocity.y);
 
-						// Anim
+						// Set animation clip
 						if (isGrounded) {
 							SetAnim("Player_Walk");
 						}
 						break;
 					case ePlayerMode.attack:
-						// Anim
+						// Set animation clip
 						SetAnim("Player_Attack", 0);
 						break;
 					case ePlayerMode.jumpFull:
-						SetMode();
+						mode = ePlayerMode.idle;
 						break;
 					case ePlayerMode.jumpHalf:
 						// Set velocity
 						rigid.velocity *= 0.5f;
 
-						SetMode();
-						break;
+                        mode = ePlayerMode.idle;
+                        break;
 					case ePlayerMode.runLeft:
 						// Set velocity
 						rigid.velocity = new Vector2(-moveSpeed * 2, rigid.velocity.y);
 
-						// Anim
+						// Set animation clip
 						if (isGrounded) {
 							SetAnim("Player_Run");
 						}
@@ -292,7 +294,7 @@ public class PlayerController : MonoBehaviour {
 						// Set velocity
 						rigid.velocity = new Vector2(moveSpeed * 2, rigid.velocity.y);
 
-						// Anim
+						// Set animation clip
 						if (isGrounded) {
 							SetAnim("Player_Run");
 						}
@@ -308,29 +310,6 @@ public class PlayerController : MonoBehaviour {
         theScale.x *= -1;
         transform.localScale = theScale;
     }
-
-	public void SetMode(ePlayerMode newMode = ePlayerMode.idle, int gravity = 99, bool zeroVelocity = false) {
-		// Reset velocity
-		if (zeroVelocity) {
-			rigid.velocity = Vector3.zero;
-		}
-
-		// Set mode
-		mode = newMode;
-
-		// Set gravity scale
-		if(gravity != 99) {
-			rigid.gravityScale = gravity;
-		}
-
-        // Set Collider size
-        switch (mode) {
-			case ePlayerMode.idle:
-				circleColl.radius = 0.35f;
-				circleColl.offset = new Vector2(0, -0.15f);
-				break;
-        }
-	}
 
 	public void SetAnim(string animName = "Player_Idle", int animSpeed = 1) {
         anim.speed = animSpeed;
