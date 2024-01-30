@@ -53,6 +53,12 @@ public class CameraManager : MonoBehaviour {
 		}
 	}
 		
+	// Set camera at a specific position
+	public void SetCamPosition(Vector2 targetPos) {
+		camPosX = targetPos.x;
+        camPosY = targetPos.y;
+    }
+
 	void LateUpdate () {
 		switch (camMode) {
 		case eCamMode.freezeCam:
