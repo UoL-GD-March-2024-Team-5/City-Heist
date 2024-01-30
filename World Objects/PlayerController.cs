@@ -324,12 +324,21 @@ public class PlayerController : MonoBehaviour {
 	// the player can move, is visible, and their collider is active
 	public void Hide() {
 		canMove = false;
-        circleColl.enabled = false;
-		sRend.enabled = false; 
-	}
+        //circleColl.enabled = false;
+		sRend.enabled = false;
+
+        // Set player velocity to 0
+        rigid.velocity = Vector2.zero;
+
+        // Freeze camera
+        CameraManager.S.camMode = eCamMode.freezeCam;
+    }
     public void StopHiding() {
-        canMove = false;
-        circleColl.enabled = false;
-        sRend.enabled = false;
+        canMove = true;
+        //circleColl.enabled = false;
+        sRend.enabled = true;
+
+		// Unfreeze camera
+		CameraManager.S.camMode = eCamMode.followAll;
     }
 }
