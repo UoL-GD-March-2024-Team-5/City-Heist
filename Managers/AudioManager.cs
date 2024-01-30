@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eSFXAudioClipName { buttonPressedSFX, buttonSelectedSFX, itemTriggerSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, unpauseSFX };
+public enum eSFXAudioClipName { buttonPressedSFX, buttonSelectedSFX, itemTriggerSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, stairsSFX, unpauseSFX };
 public enum eBGMAudioClipName { levelSelect, level1, level2, level3, win };
 
 public class AudioManager : MonoBehaviour {
@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour {
     public AudioSource pauseAudioSource;
     public AudioSource itemTriggerAudioSource;
     public AudioSource springboardAudioSource;
+    public AudioSource stairsAudioSource;
     public AudioSource unpauseAudioSource;
 
     [Header("Set Dynamically")]
@@ -74,6 +75,9 @@ public class AudioManager : MonoBehaviour {
                 break;
             case eSFXAudioClipName.springboardSFX:
                 springboardAudioSource.Play();
+                break;
+            case eSFXAudioClipName.stairsSFX:
+                stairsAudioSource.Play();
                 break;
             case eSFXAudioClipName.unpauseSFX:
                 unpauseAudioSource.Play();
