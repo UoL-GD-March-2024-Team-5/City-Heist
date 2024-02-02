@@ -139,6 +139,9 @@ public class GameManager : MonoBehaviour {
         // Load Scene
         SceneManager.LoadScene("Level_" + (levelNdx + 1).ToString());
 
+        // Ensure player game object is visible and can move
+        PlayerController.S.StopHiding();
+
         // Activate player game object
         PlayerController.S.gameObject.SetActive(true);
 
