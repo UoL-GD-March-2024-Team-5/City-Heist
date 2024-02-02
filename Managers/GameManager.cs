@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour {
     // Stores all vision cones in current level; its contents are deactivated when player is hiding or lights are turned off
     public GameObject[] visionCones;
 
+    // Stores the last selected level select button.
+    // On reload level select scene, sets this button to be currently selected game object.
+    int                 selectedLevelButtonNdx = 0;
+
     // Singleton
     private static GameManager _S;
     public static GameManager S { get { return _S; } set { _S = value; } }
@@ -85,7 +89,7 @@ public class GameManager : MonoBehaviour {
 
         // Set selected game object
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[0].gameObject);
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[selectedLevelButtonNdx].gameObject);
     }
 
     public void Loop() {
@@ -123,6 +127,9 @@ public class GameManager : MonoBehaviour {
 
         // Play SFX
         AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
+
+        // Cache button index
+        selectedLevelButtonNdx = levelNdx;
 
         // Wait, then load level
         StartCoroutine(LoadLevel(levelNdx));
