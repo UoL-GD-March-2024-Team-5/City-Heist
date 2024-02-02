@@ -12,16 +12,21 @@ public class GameManager : MonoBehaviour {
     public GameObject   gamplayUIGameObject;
     public GameObject   levelSelectionUIGameObject;
 
+    // Located on pause menu, on press goes back to level selection scene
     public Button       goBackToLevelSelectButton;
 
     public GameObject   floatingScoreGO;
 
+    // On press loads a level to play
     public List<Button> levelButtons;
 
     [Header("Set Dynamically")]
-    // Pause
+    // Pause menu
     public bool         paused;
     public GameObject   pauseMenu;
+
+    // Stores all vision cones in current level; its contents are deactivated when player is hiding or lights are turned off
+    public GameObject[] visionCones;
 
     // Singleton
     private static GameManager _S;
@@ -41,7 +46,7 @@ public class GameManager : MonoBehaviour {
         } else {
             Destroy(gameObject);
         }
-
+        
         // Load Scene
         SceneManager.LoadScene(firstScene);
     }
@@ -123,6 +128,7 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(LoadLevel(levelNdx));
     }
 
+    //
     public IEnumerator LoadLevel(int levelNdx) {
         // Wait
         yield return new WaitForSecondsRealtime(1f);
@@ -151,6 +157,9 @@ public class GameManager : MonoBehaviour {
         // Reset key count
         KeyManager.S.ResetKeyCount();
 
+        // Get and store all vision cones in newly loaded scene
+        Invoke("GetVisionConesInScene", 0.25f);
+
         // Display text & play BGM
         List<string> startMessage = new List<string>();
         switch (levelNdx) {
@@ -174,6 +183,8 @@ public class GameManager : MonoBehaviour {
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+    
+    //
     void PauseGame() {
         // Pause timer
         Timer.S.PauseTimer();
@@ -264,6 +275,8 @@ public class GameManager : MonoBehaviour {
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+    
+    //
     public void InstantiateFloatingScore(GameObject targetGO, string message, Color color, float yPosOffset = 0) {
         // Instantiate floating Score game object, & set its position to that of the target game object
         GameObject floatingScore = Instantiate(floatingScoreGO, targetGO.transform.position, Quaternion.identity);
@@ -303,5 +316,20 @@ public class GameManager : MonoBehaviour {
     // Returns name of active scene
     public string GetActiveSceneName() {
         return SceneManager.GetActiveScene().name;
+    }
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
+    // Get and store all vision cones in current scene in an array;
+    // its contents are deactivated when player is hiding or lights are turned off
+    void GetVisionConesInScene() {
+        visionCones = GameObject.FindGameObjectsWithTag("VisionCone");
+    }
+
+    // (De)Activate all vision cones in current scene
+    public void ActivateVisionCones(bool activate = true) {
+        for (int i = 0; i < visionCones.Length; i++) {
+            visionCones[i].SetActive(activate);
+        }
     }
 }
