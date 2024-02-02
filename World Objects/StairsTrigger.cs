@@ -14,13 +14,15 @@ public class StairsTrigger : MonoBehaviour {
 
     public void Update() {
         if (playerIsInTrigger) {
-            if (isGoingUpstairs) {
-                if (Input.GetAxisRaw("Vertical") > 0f) {
-                    SetPlayerPosToOppositeEndOfStairs();
-                }
-            } else {
-                if (Input.GetAxisRaw("Vertical") < 0f) {
-                    SetPlayerPosToOppositeEndOfStairs();
+            if (!GameManager.S.paused) {
+                if (isGoingUpstairs) {
+                    if (Input.GetAxisRaw("Vertical") > 0f) {
+                        SetPlayerPosToOppositeEndOfStairs();
+                    }
+                } else {
+                    if (Input.GetAxisRaw("Vertical") < 0f) {
+                        SetPlayerPosToOppositeEndOfStairs();
+                    }
                 }
             }
         }

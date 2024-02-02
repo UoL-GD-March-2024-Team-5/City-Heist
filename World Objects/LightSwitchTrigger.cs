@@ -24,22 +24,24 @@ public class LightSwitchTrigger : MonoBehaviour {
 
     public void Update() {
         if (playerIsInTrigger) {
-            if (Input.GetKeyDown(KeyCode.E)) {
-                // Swap sprite, activate room darkness, & play SFX
-                if (isTurnedOn) {
-                    sRend.sprite = switchOffSprite;
-                    isTurnedOn = false;
+            if (!GameManager.S.paused) {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    // Swap sprite, activate room darkness, & play SFX
+                    if (isTurnedOn) {
+                        sRend.sprite = switchOffSprite;
+                        isTurnedOn = false;
 
-                    roomDarknessGO.SetActive(true);
+                        roomDarknessGO.SetActive(true);
 
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
-                } else {
-                    sRend.sprite = switchOnSprite;
-                    isTurnedOn = true;
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+                    } else {
+                        sRend.sprite = switchOnSprite;
+                        isTurnedOn = true;
 
-                    roomDarknessGO.SetActive(false);
+                        roomDarknessGO.SetActive(false);
 
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.buttonSelectedSFX);
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonSelectedSFX);
+                    }
                 }
             }
         } 

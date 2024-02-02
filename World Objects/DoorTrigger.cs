@@ -28,19 +28,21 @@ public class DoorTrigger : MonoBehaviour {
 
     public void Update() {
         if (playerIsInTrigger) {
-            if (Input.GetKeyDown(KeyCode.E)) {
-                if (!doorIsLocked) {
-                    OpenDoor();
-                } else {
-                    if(KeyManager.S.keyCount > 0) {
-                        UnlockAndOpenDoor();
+            if (!GameManager.S.paused) {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    if (!doorIsLocked) {
+                        OpenDoor();
                     } else {
-                        DoorIsLocked();
-                    }
+                        if (KeyManager.S.keyCount > 0) {
+                            UnlockAndOpenDoor();
+                        } else {
+                            DoorIsLocked();
+                        }
 
-                    // Prevents calling DisplayText() above repeatedly on button press,
-                    // and instead allows the DialogueManager to deactivate the text box.
-                    playerIsInTrigger = false;
+                        // Prevents calling DisplayText() above repeatedly on button press,
+                        // and instead allows the DialogueManager to deactivate the text box.
+                        playerIsInTrigger = false;
+                    }
                 }
             }
         }

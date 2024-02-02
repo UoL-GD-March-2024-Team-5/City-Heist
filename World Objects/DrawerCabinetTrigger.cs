@@ -24,30 +24,32 @@ public class DrawerCabinetTrigger : MonoBehaviour {
 
     public void Update() {
         if (playerIsInTrigger) {
-            if (Input.GetKeyDown(KeyCode.E)) {
-                if (hasBeenOpened) {
-                    // Display text
-                    DialogueManager.S.DisplayText(hasBeenOpenedMessage);
+            if (!GameManager.S.paused) {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    if (hasBeenOpened) {
+                        // Display text
+                        DialogueManager.S.DisplayText(hasBeenOpenedMessage);
 
-                    // Play SFX
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+                        // Play SFX
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
 
-                    // Prevents calling DisplayText() above repeatedly on button press,
-                    // and instead allows the DialogueManager to deactivate the text box.
-                    playerIsInTrigger = false;
-                } else {
-                    // Instantiate collectable items
-                    for (int i = 0; i < itemsToInstantiateOnOpen.Count; i++) {
-                        GameObject go = Instantiate(itemsToInstantiateOnOpen[i], new Vector2(transform.position.x, transform.position.y + 1), Quaternion.identity);
+                        // Prevents calling DisplayText() above repeatedly on button press,
+                        // and instead allows the DialogueManager to deactivate the text box.
+                        playerIsInTrigger = false;
+                    } else {
+                        // Instantiate collectable items
+                        for (int i = 0; i < itemsToInstantiateOnOpen.Count; i++) {
+                            GameObject go = Instantiate(itemsToInstantiateOnOpen[i], new Vector2(transform.position.x, transform.position.y + 1), Quaternion.identity);
+                        }
+
+                        // Swap sprite
+                        sRend.sprite = openSprite;
+
+                        // Play SFX
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.doorOpenSFX);
+
+                        hasBeenOpened = true;
                     }
-
-                    // Swap sprite
-                    sRend.sprite = openSprite;
-
-                    // Play SFX
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.doorOpenSFX);
-
-                    hasBeenOpened = true;
                 }
             }
         }

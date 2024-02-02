@@ -20,31 +20,33 @@ public class HideTrigger : MonoBehaviour {
 
     public void Update() {
         if (playerIsInTrigger) {
-            if (Input.GetKeyDown(KeyCode.E)) {
-                // Swap sprite, hide player, & play SFX
-                if (playerIsHidingInside) {
-                    sRend.sprite = openSprite;
-                    playerIsHidingInside = false;
+            if (!GameManager.S.paused) {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    // Swap sprite, hide player, & play SFX
+                    if (playerIsHidingInside) {
+                        sRend.sprite = openSprite;
+                        playerIsHidingInside = false;
 
-                    PlayerController.S.StopHiding();
+                        PlayerController.S.StopHiding();
 
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
 
-                    // Activate all vision cones in current scene
-                    GameManager.S.ActivateVisionCones(true);
-                } else {
-                    sRend.sprite = closedSprite;
-                    playerIsHidingInside = true;
+                        // Activate all vision cones in current scene
+                        GameManager.S.ActivateVisionCones(true);
+                    } else {
+                        sRend.sprite = closedSprite;
+                        playerIsHidingInside = true;
 
-                    PlayerController.S.Hide();
+                        PlayerController.S.Hide();
 
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.buttonSelectedSFX);
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonSelectedSFX);
 
-                    // Set camera position to that of the player
-                    CameraManager.S.SetCamPosition(PlayerController.S.gameObject.transform.position);
+                        // Set camera position to that of the player
+                        CameraManager.S.SetCamPosition(PlayerController.S.gameObject.transform.position);
 
-                    // Deactivate all vision cones in current scene
-                    GameManager.S.ActivateVisionCones(false);
+                        // Deactivate all vision cones in current scene
+                        GameManager.S.ActivateVisionCones(false);
+                    }
                 }
             }
         }

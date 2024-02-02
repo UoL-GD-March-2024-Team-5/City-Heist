@@ -17,18 +17,20 @@ public class DistractionTrigger : MonoBehaviour {
 
     public void Update() {
         if (playerIsInTrigger) {
-            if (Input.GetKeyDown(KeyCode.E)) {
-                // Swap animation  & play SFX
-                if (isTurnedOn) {
-                    anim.CrossFade("Off", 0);
-                    isTurnedOn = false;
+            if (!GameManager.S.paused) {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    // Swap animation  & play SFX
+                    if (isTurnedOn) {
+                        anim.CrossFade("Off", 0);
+                        isTurnedOn = false;
 
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
-                } else {
-                    anim.CrossFade("On", 0);
-                    isTurnedOn = true;
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+                    } else {
+                        anim.CrossFade("On", 0);
+                        isTurnedOn = true;
 
-                    AudioManager.S.PlaySFX(eSFXAudioClipName.buttonSelectedSFX);
+                        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonSelectedSFX);
+                    }
                 }
             }
         }
