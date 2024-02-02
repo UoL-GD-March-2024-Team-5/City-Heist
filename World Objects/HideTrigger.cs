@@ -29,6 +29,9 @@ public class HideTrigger : MonoBehaviour {
                     PlayerController.S.StopHiding();
 
                     AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+
+                    // Activate all vision cones in current scene
+                    GameManager.S.ActivateVisionCones(true);
                 } else {
                     sRend.sprite = closedSprite;
                     playerIsHidingInside = true;
@@ -39,6 +42,9 @@ public class HideTrigger : MonoBehaviour {
 
                     // Set camera position to that of the player
                     CameraManager.S.SetCamPosition(PlayerController.S.gameObject.transform.position);
+
+                    // Deactivate all vision cones in current scene
+                    GameManager.S.ActivateVisionCones(false);
                 }
             }
         }
