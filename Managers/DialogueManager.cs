@@ -32,24 +32,26 @@ public class DialogueManager : MonoBehaviour {
 
     public void Update() {
         if (dialogueText.isActiveAndEnabled && dialogueFinished) {
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
-                if (dialogueNdx <= 0) {
-                    DeactivateTextBox();
-                } else if (dialogueNdx > 0) { // For Multiple Lines
-                    if (message.Count > 0) {
-                        List<string> tMessage;
+            if (!GameManager.S.paused) {
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space)) {
+                    if (dialogueNdx <= 0) {
+                        DeactivateTextBox();
+                    } else if (dialogueNdx > 0) { // For Multiple Lines
+                        if (message.Count > 0) {
+                            List<string> tMessage;
 
-                        tMessage = message;
+                            tMessage = message;
 
-                        tMessage.RemoveAt(0);
+                            tMessage.RemoveAt(0);
 
-                        // Call DisplayText() with one less line of "messages"
-                        DisplayText(tMessage);        
+                            // Call DisplayText() with one less line of "messages"
+                            DisplayText(tMessage);
+                        }
                     }
-                }
 
-                // Play SFX
-                AudioManager.S.PlaySFX(eSFXAudioClipName.dialogueEndSFX);
+                    // Play SFX
+                    AudioManager.S.PlaySFX(eSFXAudioClipName.dialogueEndSFX);
+                }
             }
         }  
     }
