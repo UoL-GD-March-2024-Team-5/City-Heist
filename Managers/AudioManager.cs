@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum eSFXAudioClipName { buttonPressedSFX, buttonSelectedSFX, itemTriggerSFX, springboardSFX, doorOpenSFX, dialogueSFX, dialogueEndSFX, pauseAudioSource, stairsSFX, unpauseSFX };
-public enum eBGMAudioClipName { levelSelect, level1, level2, level3, win };
+public enum eBGMAudioClipName { levelSelect, level1, level2, level3, win, lose };
 
 public class AudioManager : MonoBehaviour {
     [Header("Set in Inspector")]
@@ -102,6 +102,7 @@ public class AudioManager : MonoBehaviour {
             case eBGMAudioClipName.level2: bgmCS[2].Play(); break;
             case eBGMAudioClipName.level3: bgmCS[3].Play(); break;
             case eBGMAudioClipName.win: bgmCS[4].Play(); break;
+            case eBGMAudioClipName.lose: bgmCS[5].Play(); break;
         }
     }
 
