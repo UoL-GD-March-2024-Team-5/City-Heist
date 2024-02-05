@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour {
     // On press loads a level to play
     public List<Button> levelButtons;
 
+    // On level completed, used to help tally the player's rank by comparing amount stolen to the total amount 
+
+    public List<int> totalValueOfAllStealableItemsPerLevel = new List<int>(new int[] { 100, 100, 100 });
+
     [Header("Set Dynamically")]
     // Pause menu
     public bool         paused;
@@ -30,7 +34,9 @@ public class GameManager : MonoBehaviour {
 
     // Stores the last selected level select button.
     // On reload level select scene, sets this button to be currently selected game object.
-    int                 selectedLevelButtonNdx = 0;
+    public int          selectedLevelButtonNdx = 0;
+
+    PauseManager        pauseManagerCS;
 
     // Singleton
     private static GameManager _S;
@@ -56,8 +62,8 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        // Add Loop() to UpdateManager
-        UpdateManager.updateDelegate += Loop;
+        // Get component
+        pauseManagerCS = GetComponent<PauseManager>();  
 
         // Add go back to level select button listener
         goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectButtonPressed(); });
@@ -90,21 +96,6 @@ public class GameManager : MonoBehaviour {
         // Set selected game object
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(levelButtons[selectedLevelButtonNdx].gameObject);
-    }
-
-    public void Loop() {
-        // Pause Input
-        if(GetActiveSceneName() != "Level_Selection") {
-            if (!paused) {
-                if (Input.GetButtonDown("Pause")) {
-                    PauseGame();
-                }
-            } else {
-                if (Input.GetButtonDown("Pause") || Input.GetButtonDown("SNES B Button")) {
-                    UnpauseGame();
-                }
-            }
-        }
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
@@ -193,53 +184,6 @@ public class GameManager : MonoBehaviour {
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
-    
-    //
-    void PauseGame() {
-        // Pause timer
-        Timer.S.PauseTimer();
-
-        paused = true;
-
-        // Set gravity to 0
-        Physics2D.gravity = Vector2.zero;
-
-        // Activate pause menu
-        pauseMenu.SetActive(true);
-
-        // Set player velocity to 0
-        PlayerController.S.rigid.velocity = Vector2.zero;
-
-        // Set selected game object
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(goBackToLevelSelectButton.gameObject);
-
-        // Play SFX
-        AudioManager.S.PlaySFX(eSFXAudioClipName.pauseAudioSource);
-    }
-
-    void UnpauseGame(bool unpauseTimer = true, bool playSFX = true) {
-        // Unpause timer
-        if (unpauseTimer) {
-            Timer.S.UnpauseTimer();
-        }
-
-        paused = false;
-
-        // Reset gravity to its normal value
-        Physics2D.gravity = new Vector2(0, -15f);
-
-        // Deactivate Interactable Trigger
-        InteractableCursor.S.Deactivate();
-
-        // Deactivate pause menu
-        pauseMenu.SetActive(false);
-
-        // Play SFX
-        if (playSFX) {
-            AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
-        }
-    }
 
     public void GoBackToLevelSelectButtonPressed() {
         // Disable button interactivity
@@ -276,7 +220,7 @@ public class GameManager : MonoBehaviour {
         AudioManager.S.PlayBGM(eBGMAudioClipName.levelSelect);
 
         // Unpause game without unpausing the timer or playing any SFX
-        UnpauseGame(false, false);
+        pauseManagerCS.UnpauseGame(false, false);
 
         InitializeLevelSelectionScene();
 
