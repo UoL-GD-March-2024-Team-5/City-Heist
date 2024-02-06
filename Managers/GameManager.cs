@@ -36,7 +36,9 @@ public class GameManager : MonoBehaviour {
     // On reload level select scene, sets this button to be currently selected game object.
     public int          selectedLevelButtonNdx = 0;
 
-    PauseManager        pauseManagerCS;
+    // References to components handling separate parts of the app
+    public LevelEndManager  levelEndManagerCS;
+    public PauseManager     pauseManagerCS;
 
     // Singleton
     private static GameManager _S;
@@ -62,16 +64,17 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        // Get component
+        // Get components
+        levelEndManagerCS = GetComponent<LevelEndManager>();
         pauseManagerCS = GetComponent<PauseManager>();  
 
         // Add go back to level select button listener
         goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectButtonPressed(); });
 
         // Add level select button listeners
-        levelButtons[0].onClick.AddListener(delegate { LevelButtonPressed(0); });
-        levelButtons[1].onClick.AddListener(delegate { LevelButtonPressed(1); });
-        levelButtons[2].onClick.AddListener(delegate { LevelButtonPressed(2); });
+        levelButtons[0].onClick.AddListener(delegate { LoadLevel(0); });
+        levelButtons[1].onClick.AddListener(delegate { LoadLevel(1); });
+        levelButtons[2].onClick.AddListener(delegate { LoadLevel(2); });
 
         InitializeLevelSelectionScene();
     }
@@ -99,8 +102,8 @@ public class GameManager : MonoBehaviour {
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
-    // On button press, sets up for and loads a level scene
-    public void LevelButtonPressed(int levelNdx) {
+    // Sets up for and loads a level scene
+    public void LoadLevel(int levelNdx) {
         // Disable button interactivity
         SetButtonsInteractable(false);
 
@@ -110,12 +113,6 @@ public class GameManager : MonoBehaviour {
         // Deactivate interactable cursor
         InteractableCursor.S.Deactivate();
 
-        // Reset player game object position
-        PlayerController.S.transform.position = Vector3.zero;
-
-        // Switch cam mode to follow player game object
-        CameraManager.S.camMode = eCamMode.followAll;
-
         // Play SFX
         AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
 
@@ -123,19 +120,31 @@ public class GameManager : MonoBehaviour {
         selectedLevelButtonNdx = levelNdx;
 
         // Wait, then load level
-        StartCoroutine(LoadLevel(levelNdx));
+        StartCoroutine(WaitForLoadLevel(levelNdx));
     }
 
     //
-    public IEnumerator LoadLevel(int levelNdx) {
+    public IEnumerator WaitForLoadLevel(int levelNdx) {
         // Wait
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.75f);
+
+        // Reset player game object position
+        PlayerController.S.transform.position = Vector3.zero;
+
+        // Switch cam mode to follow player game object
+        CameraManager.S.camMode = eCamMode.followAll;
+
+        // Wait
+        yield return new WaitForSecondsRealtime(0.25f);
 
         // Open curtains
         LevelLoadTransition.S.Open();
 
         // Load Scene
         SceneManager.LoadScene("Level_" + (levelNdx + 1).ToString());
+
+        // Unpause game without unpausing the timer or playing any SFX
+        pauseManagerCS.UnpauseGame(false, false);
 
         // Ensure player game object is visible and can move
         PlayerController.S.StopHiding();
@@ -146,6 +155,9 @@ public class GameManager : MonoBehaviour {
         // Deactivate level selection UI 
         levelSelectionUIGameObject.SetActive(false);
 
+        // Deactivate level end UI
+        levelEndManagerCS.levelEndMenuGO.SetActive(false);
+        
         // Activate gameplay UI object ($, time, etc.)
         gamplayUIGameObject.SetActive(true);
 
@@ -229,7 +241,7 @@ public class GameManager : MonoBehaviour {
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
-    
+    //
     //
     public void InstantiateFloatingScore(GameObject targetGO, string message, Color color, float yPosOffset = 0) {
         // Instantiate floating Score game object, & set its position to that of the target game object
