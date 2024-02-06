@@ -6,8 +6,8 @@ using UnityEngine;
 public class NPCVisionCone : MonoBehaviour {
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "PlayerTrigger") {
-            // Game over
-            Debug.Log("Burglar detected! Game is over!");
+            // The player has been seen by an NPC, game over!
+            GameManager.S.levelEndManagerCS.GameOver();
         }
     }
 }
