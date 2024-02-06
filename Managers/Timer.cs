@@ -45,11 +45,10 @@ public class Timer : MonoBehaviour {
         return minutes.ToString() + ":" + zeroString + seconds.ToString();
     }
 
-    //
+    // Start/stop decrementing time from timer
     public void PauseTimer() {
         StopAllCoroutines();
     }
-
     public void UnpauseTimer() {
         StartCoroutine("DecrementTimeCoroutine");
     }
@@ -60,8 +59,9 @@ public class Timer : MonoBehaviour {
 		if (Time.time <= timeDone) {
 			seconds -= 1;
         } else {
-            //Debug.Log("Time is up, game over!");
-            DialogueManager.S.DisplayText("Time is up, game over!");
+            // The police have arrived, game over!
+            GameManager.S.levelEndManagerCS.GameOver();
+
             //StopCoroutine("DecrementTimeCoroutine");
             StopAllCoroutines();
         }
