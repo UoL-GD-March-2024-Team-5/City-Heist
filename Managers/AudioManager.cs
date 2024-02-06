@@ -90,9 +90,10 @@ public class AudioManager : MonoBehaviour {
         // Set current song index
         currentSongNdx = (int)clipName;
 
-        // Stop ALL BGM
+        // Stop and reset time for all BGM
         for (int i = 0; i < bgmCS.Count; i++) {
             bgmCS[i].Stop();
+            bgmCS[i].time = 0;
         }
 
         // Play song
