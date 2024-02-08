@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour {
     public LevelEndManager  levelEndManagerCS;
     public PauseManager     pauseManagerCS;
 
+    // Prevents activating NPC vision cones when moving betweeen two adjacent darkened rooms
+    public int countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer = 0;
+
     // Singleton
     private static GameManager _S;
     public static GameManager S { get { return _S; } set { _S = value; } }
