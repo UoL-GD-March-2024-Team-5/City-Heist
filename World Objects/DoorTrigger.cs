@@ -79,7 +79,7 @@ public class DoorTrigger : MonoBehaviour {
         AudioManager.S.PlaySFX(eSFXAudioClipName.doorOpenSFX);
     }
 
-    void UnlockAndOpenDoor() {
+    void UnlockAndOpenDoor(bool decrementKeyCount = true) {
         // Display text
         DialogueManager.S.DisplayText(doorIsUnlockedMessage);
 
@@ -87,7 +87,9 @@ public class DoorTrigger : MonoBehaviour {
         doorIsLocked = false;
 
         // Decrement key count
-        KeyManager.S.IncrementKeyCount(-1);
+        if (decrementKeyCount) {
+            KeyManager.S.IncrementKeyCount(-1);
+        }
 
         // Play short celebratory jingle, then resume playing previous played BGM
         StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(4));
@@ -126,7 +128,7 @@ public class DoorTrigger : MonoBehaviour {
             AudioManager.S.PlaySFX(eSFXAudioClipName.pauseAudioSource);
 
             // Finally lockpick and open door
-            UnlockAndOpenDoor();
+            UnlockAndOpenDoor(false);
         }
     }
 
