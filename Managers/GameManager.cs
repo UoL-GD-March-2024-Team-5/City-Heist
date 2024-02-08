@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour {
 
         // Reset camera position and mode
         CameraManager.S.camMode = eCamMode.freezeCam;
-        CameraManager.S.transform.position = new Vector3(0, 0, -10);
+        CameraManager.S.SetCamPosition(Vector2.zero);
 
         // Open curtains
         LevelLoadTransition.S.Open();
@@ -241,7 +241,6 @@ public class GameManager : MonoBehaviour {
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
-    //
     //
     public void InstantiateFloatingScore(GameObject targetGO, string message, Color color, float yPosOffset = 0) {
         // Instantiate floating Score game object, & set its position to that of the target game object
