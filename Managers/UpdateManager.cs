@@ -15,7 +15,7 @@ public class UpdateManager : MonoBehaviour {
 	public static event 	FixedLoopDelegate fixedUpdateDelegate;
 
 	// Selected GameObject
-	//GameObject lastselect;
+	GameObject lastselect;
 
 	// Screen Resolution
 	Vector2 resolution;
@@ -44,12 +44,12 @@ public class UpdateManager : MonoBehaviour {
 					resolution.y = Screen.height;
 				}
 
-				//// Prevent left mouse clicks from deselecting currently selected game object]
-				//if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null) {
-				//	UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(lastselect);
-				//} else {
-				//	lastselect = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-				//}
+				// Prevent left mouse clicks from deselecting currently selected game object]
+				if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null) {
+					UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(lastselect);
+				} else {
+					lastselect = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+				}
 			}
 		}
 	}
