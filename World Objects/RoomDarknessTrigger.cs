@@ -6,6 +6,8 @@ using UnityEngine;
 public class RoomDarknessTrigger : MonoBehaviour {
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "PlayerTrigger") {
+            GameManager.S.countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer += 1;
+
             // Dectivate all vision cones in current scene
             GameManager.S.ActivateVisionCones(false);
         }
@@ -13,8 +15,12 @@ public class RoomDarknessTrigger : MonoBehaviour {
 
     protected virtual void OnTriggerExit2D(Collider2D coll) {
         if (coll.gameObject.tag == "PlayerTrigger") {
+            GameManager.S.countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer -= 1;
+
             // Activate all vision cones in current scene
-            GameManager.S.ActivateVisionCones(true);
+            if(GameManager.S.countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer < 1) {
+                GameManager.S.ActivateVisionCones(true);
+            }
         }
     }
 }
