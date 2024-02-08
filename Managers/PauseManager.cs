@@ -14,7 +14,8 @@ public class PauseManager : MonoBehaviour {
 
     public void Loop() {
         // Pause Input
-        if(GameManager.S.GetActiveSceneName() != "Level_Selection") {
+        if(GameManager.S.GetActiveSceneName() != "Level_Selection" && 
+           !GameManager.S.levelEndManagerCS.levelEndMenuGO.activeInHierarchy) {
             if (!GameManager.S.paused) {
                 if (Input.GetButtonDown("Pause")) {
                     PauseGame();
@@ -27,7 +28,7 @@ public class PauseManager : MonoBehaviour {
         }
     }
 
-    void PauseGame() {
+    public void PauseGame(bool activatePauseMenu = true) {
         // Pause timer
         Timer.S.PauseTimer();
 
@@ -36,18 +37,20 @@ public class PauseManager : MonoBehaviour {
         // Set gravity to 0
         Physics2D.gravity = Vector2.zero;
 
-        // Activate pause menu
-        pauseMenuGO.SetActive(true);
-
         // Set player velocity to 0
         PlayerController.S.rigid.velocity = Vector2.zero;
 
-        // Set selected game object
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(GameManager.S.goBackToLevelSelectButton.gameObject);
+        if (activatePauseMenu) {
+            // Activate pause menu
+            pauseMenuGO.SetActive(true);
 
-        // Play SFX
-        AudioManager.S.PlaySFX(eSFXAudioClipName.pauseAudioSource);
+            // Set selected game object
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(GameManager.S.goBackToLevelSelectButton.gameObject);
+
+            // Play SFX
+            AudioManager.S.PlaySFX(eSFXAudioClipName.pauseAudioSource);
+        }
     }
 
     public void UnpauseGame(bool unpauseTimer = true, bool playSFX = true) {
