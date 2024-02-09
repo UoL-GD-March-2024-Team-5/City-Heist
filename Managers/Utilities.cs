@@ -30,4 +30,11 @@ public class Utilities : MonoBehaviour {
         // Reassign the struct data to the button
         button.navigation = navigation;
     }
+
+    // Make a list of buttons interactable
+    public void ButtonsInteractable(List<Button> buttons, bool isInteractable) {
+        for (int i = 0; i <= buttons.Count - 1; i++) {
+            buttons[i].interactable = isInteractable;
+        }
+    }
 }
