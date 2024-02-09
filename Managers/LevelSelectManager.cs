@@ -6,15 +6,18 @@ using UnityEngine.UI;
 
 public class LevelSelectManager : MonoBehaviour {
     [Header("Set in Inspector")]
-    public GameObject levelSelectionUIGameObject;
+    public GameObject   levelSelectionUIGameObject;
 
     // On press loads a level to play
     public List<Button> levelButtons;
 
+    // Displays the fastest time that the player has completed each level
+    public List<Text>   bestLevelCompletedTime;
+
     [Header("Set Dynamically")]
     // Stores the last selected level select button.
     // On reload level select scene, sets this button to be currently selected game object.
-    public int selectedLevelButtonNdx = 0;
+    public int          selectedLevelButtonNdx = 0;
 
     void Start() {
         // Add level select button listeners

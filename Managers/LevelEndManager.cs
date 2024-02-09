@@ -17,6 +17,10 @@ public class LevelEndManager : MonoBehaviour {
     public Button       tryAgainButton;
     public Button       goBackToLevelSelectButton;
 
+    [Header("Set Dynamically")]
+    // Stores the fastest time that the player has completed each level in seconds
+    public List<float>  bestTimeLevelCompleted = new List<float>(new float[] { 0, 0, 0 });
+
     private void Start() {
         // Add button listeners
         goToNextLevelButton.onClick.AddListener(delegate { LoadNextLevel(); });
@@ -53,7 +57,6 @@ public class LevelEndManager : MonoBehaviour {
 
     // Helps set up specific "level completed" settings for level end
     public void LevelCompleted() {
-        //
         LevelEndHelper();
 
         // Unlock next level
@@ -75,15 +78,17 @@ public class LevelEndManager : MonoBehaviour {
 
         // Display text
         menuHeaderText.text = "Level Completed!";
-        menuSubHeaderText.text = "You've stolen _ of _ total items!";
+        menuSubHeaderText.text = "You've stolen _ of _ total items\nwith " + Timer.S.GetTime() + " minutes to spare!";
 
         // Play short celebratory jingle, then resume playing previous played BGM
         StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(4));
+
+        // Check for and set new best time level completed
+        CheckForAndSetNewBestTimeCompleted(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx);
     }
 
     // Helps set up specific "game over" settings for level end
-    public void GameOver() {
-        
+    public void GameOver() {  
         LevelEndHelper();
 
         // Deactivate next level button 
@@ -103,5 +108,12 @@ public class LevelEndManager : MonoBehaviour {
 
         // Play short dreary jingle, then resume playing previous played BGM
         StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(5));
+    }
+
+    // On level completed, if this 'time completed' is better than saved 'best time completed', replace it
+    void CheckForAndSetNewBestTimeCompleted(int levelNdx) {
+        if (Timer.S.seconds > bestTimeLevelCompleted[levelNdx]) {
+            GameManager.S.levelSelectManagerCS.bestLevelCompletedTime[levelNdx].text = "Best time: " + Timer.S.GetTime();
+        }
     }
 }
