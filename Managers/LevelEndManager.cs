@@ -27,13 +27,13 @@ public class LevelEndManager : MonoBehaviour {
     void LoadNextLevel() {
         StopAllCoroutines();
 
-        GameManager.S.LoadLevel(GameManager.S.selectedLevelButtonNdx + 1);
+        GameManager.S.levelSelectManagerCS.LoadLevel(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx + 1);
     }
 
     void LoadCurrentLevel() {
         StopAllCoroutines();
         
-        GameManager.S.LoadLevel(GameManager.S.selectedLevelButtonNdx);
+        GameManager.S.levelSelectManagerCS.LoadLevel(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx);
     }
 
     // On both "level completed" and "game over", helps set up for level end
@@ -59,7 +59,7 @@ public class LevelEndManager : MonoBehaviour {
         // Unlock next level
 
         // Activate next level button if there's a next level
-        if(GameManager.S.selectedLevelButtonNdx < 2) {
+        if(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx < 2) {
             goToNextLevelButtonGO.SetActive(true);
         } else {
             goToNextLevelButtonGO.SetActive(false);
