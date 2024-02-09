@@ -11,13 +11,9 @@ public class GameManager : MonoBehaviour {
 
     public GameObject   gameplayUIGameObject;
 
-    // Located on pause menu, on press goes back to level selection scene
-    public Button       goBackToLevelSelectButton;
-
     public GameObject   floatingScoreGO;
 
     // On level completed, used to help tally the player's rank by comparing amount stolen to the total amount 
-
     public List<int> totalValueOfAllStealableItemsPerLevel = new List<int>(new int[] { 100, 100, 100 });
 
     [Header("Set Dynamically")]
@@ -64,54 +60,6 @@ public class GameManager : MonoBehaviour {
         levelSelectManagerCS = GetComponent<LevelSelectManager>();
         levelEndManagerCS = GetComponent<LevelEndManager>();
         pauseManagerCS = GetComponent<PauseManager>();  
-
-        // Add go back to level select button listener
-        goBackToLevelSelectButton.onClick.AddListener(delegate { GoBackToLevelSelectButtonPressed(); });
-    }
-
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
-
-    public void GoBackToLevelSelectButtonPressed() {
-        // Disable button interactivity
-        goBackToLevelSelectButton.interactable = false;
-
-        // Close curtains
-        LevelLoadTransition.S.Close();
-
-        // Deactivate Interactable Trigger
-        InteractableCursor.S.Deactivate();
-
-        // Play SFX
-        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
-
-        // Wait, then go back to level select
-        StartCoroutine(GoBackToLevelSelect());
-    }
-
-    public IEnumerator GoBackToLevelSelect() {
-        // Wait
-        yield return new WaitForSecondsRealtime(1f);
-
-        // Reset camera position and mode
-        CameraManager.S.camMode = eCamMode.freezeCam;
-        CameraManager.S.SetCamPosition(Vector2.zero);
-
-        // Open curtains
-        LevelLoadTransition.S.Open();
-
-        // Load Scene
-        SceneManager.LoadScene("Level_Selection");
-
-        // Play BGM
-        AudioManager.S.PlayBGM(eBGMAudioClipName.levelSelect);
-
-        // Unpause game without unpausing the timer or playing any SFX
-        pauseManagerCS.UnpauseGame(false, false);
-
-        levelSelectManagerCS.InitializeLevelSelectionScene();
-
-        // Enable button interactivity
-        goBackToLevelSelectButton.interactable = true;
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //

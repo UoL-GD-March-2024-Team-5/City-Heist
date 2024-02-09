@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Handles pausing and unpausing the game.
 public class PauseManager : MonoBehaviour {
     [Header("Set in Inspector")]
     public GameObject pauseMenuGO;
 
+    // On press goes back to level selection scene
+    public Button goBackToLevelSelectButton;
+
     void Start() {
+        // Add go back to level select button listener
+        goBackToLevelSelectButton.onClick.AddListener(delegate { GameManager.S.levelSelectManagerCS.GoBackToLevelSelectButtonPressed(); });
+
         // Add Loop() to UpdateManager
         UpdateManager.updateDelegate += Loop;
     }
@@ -46,7 +53,7 @@ public class PauseManager : MonoBehaviour {
 
             // Set selected game object
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(GameManager.S.goBackToLevelSelectButton.gameObject);
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(goBackToLevelSelectButton.gameObject);
 
             // Play SFX
             AudioManager.S.PlaySFX(eSFXAudioClipName.pauseAudioSource);

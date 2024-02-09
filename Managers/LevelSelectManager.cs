@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevelSelectManager : MonoBehaviour
-{
+public class LevelSelectManager : MonoBehaviour {
     [Header("Set in Inspector")]
     public GameObject levelSelectionUIGameObject;
 
@@ -139,5 +138,50 @@ public class LevelSelectManager : MonoBehaviour
 
         // Enable button interactivity
         Utilities.S.ButtonsInteractable(levelButtons, true);
+    }
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
+    public void GoBackToLevelSelectButtonPressed() {
+        // Disable button interactivity
+        GameManager.S.pauseManagerCS.goBackToLevelSelectButton.interactable = false;
+
+        // Close curtains
+        LevelLoadTransition.S.Close();
+
+        // Deactivate Interactable Trigger
+        InteractableCursor.S.Deactivate();
+
+        // Play SFX
+        AudioManager.S.PlaySFX(eSFXAudioClipName.buttonPressedSFX);
+
+        // Wait, then go back to level select
+        StartCoroutine(GoBackToLevelSelect());
+    }
+
+    public IEnumerator GoBackToLevelSelect() {
+        // Wait
+        yield return new WaitForSecondsRealtime(1f);
+
+        // Reset camera position and mode
+        CameraManager.S.camMode = eCamMode.freezeCam;
+        CameraManager.S.SetCamPosition(Vector2.zero);
+
+        // Open curtains
+        LevelLoadTransition.S.Open();
+
+        // Load Scene
+        SceneManager.LoadScene("Level_Selection");
+
+        // Play BGM
+        AudioManager.S.PlayBGM(eBGMAudioClipName.levelSelect);
+
+        // Unpause game without unpausing the timer or playing any SFX
+        GameManager.S.pauseManagerCS.UnpauseGame(false, false);
+
+        GameManager.S.levelSelectManagerCS.InitializeLevelSelectionScene();
+
+        // Enable button interactivity
+        GameManager.S.pauseManagerCS.goBackToLevelSelectButton.interactable = true;
     }
 }

@@ -21,7 +21,7 @@ public class LevelEndManager : MonoBehaviour {
         // Add button listeners
         goToNextLevelButton.onClick.AddListener(delegate { LoadNextLevel(); });
         tryAgainButton.onClick.AddListener(delegate { LoadCurrentLevel(); });
-        goBackToLevelSelectButton.onClick.AddListener(delegate { GameManager.S.GoBackToLevelSelectButtonPressed(); });
+        goBackToLevelSelectButton.onClick.AddListener(delegate { GameManager.S.levelSelectManagerCS.GoBackToLevelSelectButtonPressed(); });
     }
     
     void LoadNextLevel() {
