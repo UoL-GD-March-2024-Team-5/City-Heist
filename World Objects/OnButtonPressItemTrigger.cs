@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//
 // On button press, add this item to the player's haul of stolen items
 public class OnButtonPressItemTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
@@ -20,8 +20,11 @@ public class OnButtonPressItemTrigger : MonoBehaviour {
                     // Instantiate floating score game object (temporarily displays this item's value to the user)
                     GameManager.S.InstantiateFloatingScore(PlayerController.S.gameObject, "+$" + value, Color.green);
 
-                    // Increment score/total value of stolen items
+                    // Increment total value of items stolen UI text
                     ScoreManager.S.IncrementScore(value);
+
+                    // Increment amount of items stolen
+                    GameManager.S.levelEndManagerCS.IncrementAmountStolen();
 
                     // Deactivate gameObject
                     gameObject.SetActive(false);
