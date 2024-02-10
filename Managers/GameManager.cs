@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour {
 
     public GameObject   floatingScoreGO;
 
-    // On level completed, used to help tally the player's rank by comparing amount stolen to the total amount 
-    public List<int> totalValueOfAllStealableItemsPerLevel = new List<int>(new int[] { 100, 100, 100 });
+    //// On level completed, used to help tally the player's rank by comparing amount stolen to the total amount 
+    //public List<int>    totalValueOfAllStealableItemsPerLevel = new List<int>(new int[] { 100, 100, 100 });
 
     [Header("Set Dynamically")]
     // Pause menu

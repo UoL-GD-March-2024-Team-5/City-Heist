@@ -18,8 +18,16 @@ public class LevelEndManager : MonoBehaviour {
     public Button       goBackToLevelSelectButton;
 
     [Header("Set Dynamically")]
-    // Stores the fastest time that the player has completed each level in seconds
+    // Tracks the amount of items the player has stolen per level
+    public List<float>  itemsStolenPerLevel = new List<float>(new float[] { 0, 0, 0 });
+
+    // Stores the amount of total stealable items per level
+    public List<float>  totalStealableItemsPerLevel = new List<float>(new float[] { 4, 4, 4 });
+
+    // Stores the fastest time (in seconds) that the player has ever completed each level,
+    // and the most amount of items they've ever stolen per level
     public List<float>  bestTimeLevelCompleted = new List<float>(new float[] { 0, 0, 0 });
+    public List<float>  bestAmountOfItemsStolenPerLevel = new List<float>(new float[] { 0, 0, 0 });
 
     private void Start() {
         // Add button listeners
@@ -50,16 +58,11 @@ public class LevelEndManager : MonoBehaviour {
 
         // Deactivate interactable cursor
         InteractableCursor.S.Deactivate();
-
-        // Calculate score/rank
-        
     }
 
     // Helps set up specific "level completed" settings for level end
     public void LevelCompleted() {
         LevelEndHelper();
-
-        // Unlock next level
 
         // Activate next level button if there's a next level
         if(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx < 2) {
@@ -78,13 +81,16 @@ public class LevelEndManager : MonoBehaviour {
 
         // Display text
         menuHeaderText.text = "Level Completed!";
-        menuSubHeaderText.text = "You've stolen _ of _ total items\nwith " + Timer.S.GetTime() + " minutes to spare!";
+        menuSubHeaderText.text = (int)(GetPercentageOfItemsStolen(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx) * 100) + "% of total items stolen" + " of total items stolen\nwith " + Timer.S.GetTime() + " minutes to spare!";
 
         // Play short celebratory jingle, then resume playing previous played BGM
         StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(4));
 
         // Check for and set new best time level completed
         CheckForAndSetNewBestTimeCompleted(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx);
+
+        // Check for and set new best rank level completed
+        CheckForAndSetNewBestRankCompleted(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx);
     }
 
     // Helps set up specific "game over" settings for level end
@@ -115,5 +121,52 @@ public class LevelEndManager : MonoBehaviour {
         if (Timer.S.seconds > bestTimeLevelCompleted[levelNdx]) {
             GameManager.S.levelSelectManagerCS.bestLevelCompletedTime[levelNdx].text = "Best time: " + Timer.S.GetTime();
         }
+    }
+
+    // On level completed, if this 'rank' is better than saved 'best rank', replace it
+    void CheckForAndSetNewBestRankCompleted(int levelNdx) {
+        if (itemsStolenPerLevel[levelNdx] > bestAmountOfItemsStolenPerLevel[levelNdx]) {
+            GameManager.S.levelSelectManagerCS.bestLevelCompletedRank[levelNdx].text = "Best rank: " + GetRankName(levelNdx) + "\n" + (int)(GetPercentageOfItemsStolen(levelNdx)*100) + "% of total items stolen"; ;
+        }
+    }
+
+    // Increment count of items stolen from level that was just completed
+    public void IncrementAmountStolen() {
+        itemsStolenPerLevel[GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx] += 1;
+    }
+
+    // Get the percentage of total items stolen from level that was just completed
+    float GetPercentageOfItemsStolen(int levelNdx) {
+        float percentage = itemsStolenPerLevel[levelNdx] / totalStealableItemsPerLevel[levelNdx];
+        return percentage;
+    }
+
+    // Get cheeky rank name based off percentage of items stolen from level that was just completed
+    string GetRankName(int levelNdx) {
+        float percentageOfItemsStolen = GetPercentageOfItemsStolen(levelNdx);
+
+        string rankName = "";
+        if (percentageOfItemsStolen <= 0.10f) {
+            rankName = "Fumbling Footpad";
+        } else if (percentageOfItemsStolen > 0.11f && percentageOfItemsStolen <= 0.20f) {
+            rankName = "Lazy Looter";
+        } else if (percentageOfItemsStolen > 0.21f && percentageOfItemsStolen <= 0.30f) {
+            rankName = "Cursory Crook";
+        } else if (percentageOfItemsStolen > 0.31f && percentageOfItemsStolen <= 0.40f) {
+            rankName = "Below Average Burglar";
+        } else if (percentageOfItemsStolen > 0.41f && percentageOfItemsStolen <= 0.50f) {
+            rankName = "Middling Mugger";
+        } else if (percentageOfItemsStolen > 0.51f && percentageOfItemsStolen <= 0.60f) {
+            rankName = "Burgeoning Bandit";
+        } else if (percentageOfItemsStolen > 0.61f && percentageOfItemsStolen <= 0.70f) {
+            rankName = "Pretty Good Pillager";
+        } else if (percentageOfItemsStolen > 0.71f && percentageOfItemsStolen <= 0.80f) {
+            rankName = "Seasoned Swindler";
+        } else if (percentageOfItemsStolen > 0.81f && percentageOfItemsStolen <= 0.90f) {
+            rankName = "Proud Pilferer";
+        } else if (percentageOfItemsStolen > 0.91f && percentageOfItemsStolen <= 1.0f) {
+            rankName = "Master Thief";
+        }
+        return rankName;
     }
 }

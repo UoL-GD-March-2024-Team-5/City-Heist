@@ -14,6 +14,9 @@ public class LevelSelectManager : MonoBehaviour {
     // Displays the fastest time that the player has completed each level
     public List<Text>   bestLevelCompletedTime;
 
+    // Displays the best rank achieved by the player for each completed level
+    public List<Text>   bestLevelCompletedRank;
+
     [Header("Set Dynamically")]
     // Stores the last selected level select button.
     // On reload level select scene, sets this button to be currently selected game object.
@@ -117,6 +120,9 @@ public class LevelSelectManager : MonoBehaviour {
 
         // Reset key count
         KeyManager.S.ResetKeyCount();
+
+        // Reset amount of items stolen 
+        GameManager.S.levelEndManagerCS.itemsStolenPerLevel[levelNdx] = 0;
 
         // Get and store all vision cones in newly loaded scene
         GameManager.S.Invoke("GetVisionConesInScene", 0.25f);
