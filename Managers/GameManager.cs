@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
     public LevelSelectManager   levelSelectManagerCS;
     public LevelEndManager      levelEndManagerCS;
     public PauseManager         pauseManagerCS;
+    public HintPopUpManager     hintPopUpManagerCS;
 
     // Prevents activating NPC vision cones when moving betweeen two adjacent darkened rooms
     public int countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer = 0;
@@ -56,7 +57,8 @@ public class GameManager : MonoBehaviour {
         // Get components
         levelSelectManagerCS = GetComponent<LevelSelectManager>();
         levelEndManagerCS = GetComponent<LevelEndManager>();
-        pauseManagerCS = GetComponent<PauseManager>();  
+        pauseManagerCS = GetComponent<PauseManager>();
+        hintPopUpManagerCS = GetComponent<HintPopUpManager>();
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
