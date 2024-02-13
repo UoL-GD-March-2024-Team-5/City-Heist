@@ -110,7 +110,7 @@ public class LevelEndManager : MonoBehaviour {
 
         // Display text
         menuHeaderText.text = "Game Over!";
-        menuSubHeaderText.text = "You've been caught!";
+        menuSubHeaderText.text = (int)(GetPercentageOfItemsStolen(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx) * 100) + "% of total items stolen" + " of total items stolen...\n " + "...but you've been caught!";
 
         // Play short dreary jingle, then resume playing previous played BGM
         StartCoroutine(AudioManager.S.PlayShortJingleThenResumePreviousBGM(5));
