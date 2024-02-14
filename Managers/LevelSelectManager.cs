@@ -131,7 +131,7 @@ public class LevelSelectManager : MonoBehaviour {
         List<string> startMessage = new List<string>();
         switch (levelNdx) {
             case 0:
-                startMessage = new List<string>() { "Hey, press the E key or space bar on your keyboard to move to the next batch of dialogue.", "You can also press E to open doors...", "...space bar to jump...", "...P or Esc to pause...", "...and hold left shift while moving to run.", "Got it?", "Well, you better!" };
+                startMessage = new List<string>() { "Hey, welcome to level 1. Press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Anyway...", "A thief has been reported in the area. The police are on their way. Grab the loot and get out!" };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level1);
                 break;
             case 1:
