@@ -58,6 +58,9 @@ public class LevelEndManager : MonoBehaviour {
 
         // Deactivate interactable cursor
         InteractableCursor.S.Deactivate();
+
+        // Deactivate hint pop up
+        GameManager.S.hintPopUpManagerCS.Deactivate();
     }
 
     // Helps set up specific "level completed" settings for level end
