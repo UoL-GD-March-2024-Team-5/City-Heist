@@ -27,8 +27,11 @@ public class GameManager : MonoBehaviour {
     public PauseManager         pauseManagerCS;
     public HintPopUpManager     hintPopUpManagerCS;
 
-    // Prevents activating NPC vision cones when moving betweeen two adjacent darkened rooms
+    // Prevents activating NPC vision cones when moving between two adjacent darkened rooms
     public int countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer = 0;
+
+    // Prevents deactivating 'hint pop up' game object when moving between two adjacent triggers
+    public int countOfHintPopUpTriggersCurrentlyOccupiedByPlayer = 0;
 
     // Singleton
     private static GameManager _S;
