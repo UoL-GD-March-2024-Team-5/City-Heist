@@ -5,6 +5,8 @@ using UnityEngine;
 // On button press, turn off lights, which makes the player invisible to detection
 public class LightSwitchTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
+    public bool             onPlayerTriggerEnterDisplayHintPopUp;
+
     public Sprite           switchOffSprite, switchOnSprite;
 
     public GameObject       roomDarknessGO;
@@ -21,7 +23,7 @@ public class LightSwitchTrigger : MonoBehaviour {
 
         roomDarknessGO.SetActive(false);
     }
-
+    
     public void Update() {
         if (playerIsInTrigger) {
             if (!GameManager.S.paused) {
@@ -51,8 +53,13 @@ public class LightSwitchTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to turn lights on/off.");
+            }
         }
     }
 
@@ -60,8 +67,11 @@ public class LightSwitchTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate interactable cursor
             InteractableCursor.S.Deactivate();
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
         }
     }
 }

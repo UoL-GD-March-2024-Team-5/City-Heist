@@ -7,6 +7,8 @@ public class DrawerCabinetTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
     public bool             hasBeenOpened;
 
+    public bool             onPlayerTriggerEnterDisplayHintPopUp;
+
     public string           hasBeenOpenedMessage = "You've already looted this cabinet.\nIt's empty, you greedy pig.";
 
     public Sprite           openSprite;
@@ -59,8 +61,13 @@ public class DrawerCabinetTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to open.");
+            }
         }
     }
 
@@ -68,8 +75,11 @@ public class DrawerCabinetTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate interactable cursor
             InteractableCursor.S.Deactivate();
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
         }
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 // On button press, hides the player within this object, obscuring them from the view of NPCs
 public class HideTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
+    public bool             onPlayerTriggerEnterDisplayHintPopUp;
+
     public Sprite           openSprite, closedSprite;
 
     [Header("Set Dynamically")]
@@ -51,22 +53,30 @@ public class HideTrigger : MonoBehaviour {
             }
         }
     }
-
+    
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to hide inside or exit.");
+            }
         }
     }
-
+    
     protected virtual void OnTriggerExit2D(Collider2D coll) {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate interactable cursor
             InteractableCursor.S.Deactivate();
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
         }
     }
 }

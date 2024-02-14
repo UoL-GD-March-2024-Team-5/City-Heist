@@ -4,6 +4,9 @@ using UnityEngine;
 
 // On button press, activate this object, a TV or radio, to lure people and pets away
 public class DistractionTrigger : MonoBehaviour {
+    [Header("Set in Inspector")]
+    public bool onPlayerTriggerEnterDisplayHintPopUp;
+
     [Header("Set Dynamically")]
     public Animator anim;
 
@@ -40,8 +43,13 @@ public class DistractionTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to turn on/off.");
+            }
         }
     }
 
@@ -49,8 +57,11 @@ public class DistractionTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate interactable cursor
             InteractableCursor.S.Deactivate();
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
         }
     }
 }

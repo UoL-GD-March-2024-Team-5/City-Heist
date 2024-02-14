@@ -7,8 +7,10 @@ public class StairsTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
     public Transform    destinationTransform;
     public Animator     directionArrowAnim;
+
     public bool         isGoingUpstairs;
-    
+    public bool         onPlayerTriggerEnterDisplayHintPopUp;
+
     [Header("Set Dynamically")]
     public bool         playerIsInTrigger;
 
@@ -43,6 +45,15 @@ public class StairsTrigger : MonoBehaviour {
 
             // Play direction arrow on animation clip
             directionArrowAnim.CrossFade("On", 0);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                if (isGoingUpstairs) {
+                    GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press Up Arrow or W to go upstairs.");
+                } else {
+                    GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press Down Arrow or S to go downstairs.");
+                }
+            }
         }
     }
 
@@ -52,6 +63,9 @@ public class StairsTrigger : MonoBehaviour {
 
             // Play direction arrow off animation clip
             directionArrowAnim.CrossFade("Off", 0);
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
         }
     }
 }

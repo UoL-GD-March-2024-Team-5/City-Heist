@@ -11,6 +11,8 @@ public class DoorTrigger : MonoBehaviour {
 
     public bool             doorOpensToLeft;
 
+    public bool             onPlayerTriggerEnterDisplayHintPopUp;
+
     public string           doorIsLockedMessage = "This door is locked. Find a key!";
     public string           doorIsUnlockedMessage = "Great, you unlocked the door!";
 
@@ -153,8 +155,13 @@ public class DoorTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if(onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to open door.");
+            }
         }
     }
 
@@ -162,8 +169,11 @@ public class DoorTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate interactable cursor
             InteractableCursor.S.Deactivate();
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
 
             StopCoroutine("AttemptToLockpickDoor");
         }

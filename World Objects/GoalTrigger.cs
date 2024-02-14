@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//
+
 // On player trigger enter, level completed (display how well player performed, unlock next level, & activate menu
 // with buttons to 1) Proceed to next level, 2) Try level again, 3) Go back to level selection).
 public class GoalTrigger : MonoBehaviour {
+    [Header("Set in Inspector")]
+    public bool onPlayerTriggerEnterDisplayHintPopUp;
+
     [Header("Set Dynamically")]
     public bool playerIsInTrigger;
 
@@ -22,8 +25,13 @@ public class GoalTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to enter getaway car and exit level with your loot.");
+            }
         }
     }
 
@@ -31,8 +39,11 @@ public class GoalTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate interactable cursor
             InteractableCursor.S.Deactivate();
+
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
         }
     }
 }

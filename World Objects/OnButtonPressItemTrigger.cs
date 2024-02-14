@@ -7,6 +7,8 @@ public class OnButtonPressItemTrigger : MonoBehaviour {
     [Header("Set in Inspector")]
     public int  value = 0;
 
+    public bool onPlayerTriggerEnterDisplayHintPopUp;
+
     [Header("Set Dynamically")]
     public bool playerIsInTrigger;
 
@@ -37,8 +39,13 @@ public class OnButtonPressItemTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
 
-            // Activate Interactable Trigger
+            // Activate interactable cursor
             InteractableCursor.S.Activate(gameObject);
+
+            // Activate hint pop up
+            if (onPlayerTriggerEnterDisplayHintPopUp) {
+                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to steal.");
+            }
         }
     }
 
@@ -46,7 +53,10 @@ public class OnButtonPressItemTrigger : MonoBehaviour {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = false;
 
-            // Deactivate Interactable Trigger
+            // Deactivate hint pop up
+            GameManager.S.hintPopUpManagerCS.Deactivate();
+
+            // Deactivate interactable cursor
             if (gameObject.activeInHierarchy) {
                 InteractableCursor.S.Deactivate();
             }
