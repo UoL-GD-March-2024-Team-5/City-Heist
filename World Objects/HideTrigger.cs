@@ -34,7 +34,9 @@ public class HideTrigger : MonoBehaviour {
                         AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
 
                         // Activate all vision cones in current scene
-                        GameManager.S.ActivateVisionCones(true);
+                        if(GameManager.S.countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer <= 0) {
+                            GameManager.S.ActivateVisionCones(true);
+                        }
                     } else {
                         sRend.sprite = closedSprite;
                         playerIsHidingInside = true;
