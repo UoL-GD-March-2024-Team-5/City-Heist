@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ItemTrigger : MonoBehaviour {
 	[Header("Set in Inspector")]
-	public int value = 0;
+	public int		value = 0;
+    public string	itemName = "";
 
     void OnTriggerEnter2D(Collider2D coll) {
 		PlayerController player = coll.gameObject.GetComponent<PlayerController>();
@@ -16,7 +17,7 @@ public class ItemTrigger : MonoBehaviour {
 			AudioManager.S.PlaySFX(eSFXAudioClipName.itemTriggerSFX);
 
 			// Instantiate floating score game object (temporarily displays this item's value to the user)
-            GameManager.S.InstantiateFloatingScore(PlayerController.S.gameObject, "+$" + value, Color.green);
+            GameManager.S.InstantiateFloatingScore(PlayerController.S.gameObject, (itemName + "\n+$" + value), Color.green);
 
 			// Increment score/total value of stolen items
 			ScoreManager.S.IncrementScore(value);
