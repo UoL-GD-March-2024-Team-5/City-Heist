@@ -160,7 +160,11 @@ public class DoorTrigger : MonoBehaviour {
 
             // Activate hint pop up
             if(onPlayerTriggerEnterDisplayHintPopUp) {
-                GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to open door.");
+                if (!doorIsLocked) {
+                    GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to open door.");
+                } else {
+                    GameManager.S.hintPopUpManagerCS.ActivateAndSetText("Press E to lockpick door in 5 seconds.");
+                }
             }
         }
     }
