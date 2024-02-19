@@ -21,12 +21,17 @@ public class CameraManager : MonoBehaviour {
 
 	public eCamMode 		camMode;
 
-	// Clamps CamPosX
+	// Clamps camera horizontally from moving outside of a min & max point on the x-axis
 	public bool 			hasMinMaxPosX; 
 	public float 			minPosX;
 	public float 			maxPosX;
 
-	public bool				canLerp;
+    // Clamps camera vertically from moving outside of a min & max point on the y-axis
+    public bool				hasMinMaxPosY;
+    public float			minPosY;
+    public float			maxPosY;
+
+    public bool				canLerp;
 
 	// Singleton
 	private static CameraManager _S;
@@ -82,8 +87,14 @@ public class CameraManager : MonoBehaviour {
 			destination.x = Mathf.Min (destination.x, maxPosX);
 		}
 
-		// Interpolate from the current Camera position towards Destination
-		if (canLerp) {
+        // Clamps CamPosY
+        if (hasMinMaxPosY) {
+            destination.y = Mathf.Max(destination.y, minPosY);
+            destination.y = Mathf.Min(destination.y, maxPosY);
+        }
+
+        // Interpolate from the current Camera position towards Destination
+        if (canLerp) {
 			destination = Vector3.SmoothDamp(transform.localPosition, destination, ref velocity, easing);
 		}
 
