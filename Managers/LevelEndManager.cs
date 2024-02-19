@@ -70,17 +70,25 @@ public class LevelEndManager : MonoBehaviour {
         // Activate next level button if there's a next level
         if(GameManager.S.levelSelectManagerCS.selectedLevelButtonNdx < 2) {
             goToNextLevelButtonGO.SetActive(true);
+
+            // Set selected game object
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(goToNextLevelButtonGO);
+
+            // Set button navigation
+            Utilities.S.SetButtonNavigation(tryAgainButton, goToNextLevelButton, goBackToLevelSelectButton);
+            Utilities.S.SetButtonNavigation(goBackToLevelSelectButton, tryAgainButton, goToNextLevelButton);
         } else {
             goToNextLevelButtonGO.SetActive(false);
+
+            // Set selected game object
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(tryAgainButton.gameObject);
+            
+            // Set button navigation
+            Utilities.S.SetButtonNavigation(tryAgainButton, goBackToLevelSelectButton, goBackToLevelSelectButton);
+            Utilities.S.SetButtonNavigation(goBackToLevelSelectButton, tryAgainButton, tryAgainButton);
         }
-
-        // Set selected game object
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(goToNextLevelButtonGO);
-
-        // Set button navigation
-        Utilities.S.SetButtonNavigation(tryAgainButton, goToNextLevelButton, goBackToLevelSelectButton);
-        Utilities.S.SetButtonNavigation(goBackToLevelSelectButton, tryAgainButton, goToNextLevelButton);
 
         // Display text
         menuHeaderText.text = "Level Completed!";
