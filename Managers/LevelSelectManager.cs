@@ -127,20 +127,23 @@ public class LevelSelectManager : MonoBehaviour {
         // Get and store all vision cones in newly loaded scene
         GameManager.S.Invoke("GetVisionConesInScene", 0.25f);
 
-        // Display text & play BGM
+        // Display text, play BGM, adjust camera horizontal bounds
         List<string> startMessage = new List<string>();
         switch (levelNdx) {
             case 0:
                 startMessage = new List<string>() { "Hey, welcome to level 1. Press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Anyway...", "A thief has been reported in the area. The police are on their way. Grab the loot and get out!" };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level1);
+                CameraManager.S.maxPosX = 12;
                 break;
             case 1:
                 startMessage = new List<string>() { "Hey, this is level 2.", "Not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level2);
+                CameraManager.S.maxPosX = 12;
                 break;
             case 2:
                 startMessage = new List<string>() { "Wow, you've started level 3!", "Still not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level3);
+                CameraManager.S.maxPosX = 20;
                 break;
         }
         DialogueManager.S.DisplayText(startMessage);
