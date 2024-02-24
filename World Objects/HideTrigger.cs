@@ -21,23 +21,12 @@ public class HideTrigger : MonoBehaviour {
     }
 
     public void Update() {
-        if (playerIsInTrigger) {
-            if (!GameManager.S.paused) {
-                if (Input.GetKeyDown(KeyCode.E)) {
-                    // Swap sprite, hide player, & play SFX
-                    if (playerIsHidingInside) {
-                        sRend.sprite = openSprite;
-                        playerIsHidingInside = false;
-
-                        PlayerController.S.StopHiding();
-
-                        AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
-
-                        // Activate all vision cones in current scene
-                        if(GameManager.S.countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer <= 0) {
-                            GameManager.S.ActivateVisionCones(true);
-                        }
-                    } else {
+        if (!GameManager.S.paused) {
+            if (Input.GetKeyDown(KeyCode.E)) {
+                // On button press hide player
+                if (!playerIsHidingInside) {
+                    if (playerIsInTrigger) {
+                        // Swap sprite, hide player, & play SFX
                         sRend.sprite = closedSprite;
                         playerIsHidingInside = true;
 
@@ -51,11 +40,25 @@ public class HideTrigger : MonoBehaviour {
                         // Deactivate all vision cones in current scene
                         GameManager.S.ActivateVisionCones(false);
                     }
-                }
+                // On button press unhide player
+                } else {
+                    // Swap sprite, hide player, & play SFX
+                    sRend.sprite = openSprite;
+                    playerIsHidingInside = false;
+
+                    PlayerController.S.StopHiding();
+
+                    AudioManager.S.PlaySFX(eSFXAudioClipName.unpauseSFX);
+
+                    // Activate all vision cones in current scene
+                    if (GameManager.S.countOfRoomDarknessTriggersCurrentlyOccupiedByPlayer <= 0) {
+                        GameManager.S.ActivateVisionCones(true);
+                    }
+                } 
             }
         }
     }
-    
+
     protected virtual void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "PlayerTrigger") {
             playerIsInTrigger = true;
