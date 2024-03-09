@@ -131,17 +131,17 @@ public class LevelSelectManager : MonoBehaviour {
         List<string> startMessage = new List<string>();
         switch (levelNdx) {
             case 0:
-                startMessage = new List<string>() { "Hey, welcome to level 1. Press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Anyway...", "A thief has been reported in the area. The police are on their way. Grab the loot and get out!" };
+                startMessage = new List<string>() { "Hey, welcome to level 1. Press the E key or space bar on your keyboard to move to the next batch of dialogue.", "Anyway...", "...A thief has been reported in the area. The police are on their way. Grab the loot and get out!" };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level1);
                 CameraManager.S.maxPosX = 12;
                 break;
             case 1:
-                startMessage = new List<string>() { "Hey, this is level 2.", "Not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
+                startMessage = new List<string>() { "Yo, this is level 2.", "Another thief's been reported in another area, and another batch of police are on their way.", "Sound familiar?", "Grab the loot and get out!" };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level2);
                 CameraManager.S.maxPosX = 12;
                 break;
             case 2:
-                startMessage = new List<string>() { "Wow, you've started level 3!", "Still not much going on here...", "...so maybe pause the game (press P or Esc) and click the 'go back' button to get outta here." };
+                startMessage = new List<string>() { "Wow, you've made it all the way to level 3.", "You must be sneaky as a weasel to have snuck around this far!", "Well, you clearly know the drill by now...", "...GRAB THE LOOT AND GET OUT!" };
                 AudioManager.S.PlayBGM(eBGMAudioClipName.level3);
                 CameraManager.S.maxPosX = 20;
                 break;
